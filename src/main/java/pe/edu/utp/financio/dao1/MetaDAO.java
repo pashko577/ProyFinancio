@@ -4,6 +4,7 @@
  */
 package pe.edu.utp.financio.dao1;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 import pe.edu.utp.financio.modelo.Meta;
@@ -15,7 +16,7 @@ import pe.edu.utp.financio.modelo.Meta;
 public interface MetaDAO {
      int registrar(Meta meta) throws SQLException;
     List<Meta> listarActivasPorUsuario(int idUsuario) throws SQLException;
-    void actualizarAcumulado(int idMeta, double monto) throws SQLException;
+    void actualizarAcumulado(int idMeta, BigDecimal monto) throws SQLException;
     void desactivarSiCumplida(int idMeta) throws SQLException;
 }
 

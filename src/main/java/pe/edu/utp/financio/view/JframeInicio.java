@@ -7,6 +7,23 @@ package pe.edu.utp.financio.view;
 import java.awt.CardLayout;
 import java.awt.Panel;
 
+import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.util.List;
+
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+
+import javax.swing.JOptionPane;
+
+import pe.edu.utp.financio.dao.impl.CategoriaDaoImpl;
+import pe.edu.utp.financio.dao.impl.MovimientoDaoImpl;
+
+import pe.edu.utp.financio.dao1.MovimientoDAO;
+import pe.edu.utp.financio.modelo.Categoria;
+import pe.edu.utp.financio.modelo.Movimiento;
+import pe.edu.utp.financio.modelo.Usuario;
+
 /**
  *
  * @author User
@@ -16,10 +33,49 @@ public class JframeInicio extends javax.swing.JFrame {
     /**
      * Creates new form JframeInicio
      */
+    private Usuario usuario;
     CardLayout cardLayout;
 
-    public JframeInicio() {
+    
+   private void cargarCategorias() throws SQLException {
+    CategoriaDaoImpl dao = new CategoriaDaoImpl();
+    List<Categoria> categoriasIngresos = dao.listarPorUsuario(usuario.getId(), "INGRESO");
+
+    cbxingrsocategoria.removeAllItems();
+
+    if (categoriasIngresos.isEmpty()) {
+        // Creamos 3 categorías de ejemplo automáticamente
+        String[] nombresDefault = {"Alimentos", "Transporte", "Salud"};
+        for (String nombre : nombresDefault) {
+            Categoria cat = new Categoria(0, usuario.getId(), nombre, "INGRESO");
+            int idGenerado = dao.registrar(cat);  // insert en BD
+            cat.setId(idGenerado);
+            categoriasIngresos.add(cat);
+            System.out.println("Se creó categoría por defecto: " + nombre + " con ID: " + idGenerado);
+        }
+    }
+
+    // Llenamos el combo
+    for (Categoria c : categoriasIngresos) {
+        cbxingrsocategoria.addItem(c);
+    }
+
+    // Opción para crear nueva categoría
+    cbxingrsocategoria.addItem(new Categoria(-1, usuario.getId(), "➕ Nueva categoría...", "INGRESO"));
+    cbxingrsocategoria.addItem(new Categoria(-2, usuario.getId(), "❌ Eliminar categoría...", "INGRESO"));
+
+    // Depuración
+    System.out.println("Categorías cargadas en el combo: " + categoriasIngresos.size());
+    for(Categoria c : categoriasIngresos){
+        System.out.println(" -> " + c.getNombre());
+    }
+}
+
+
+    public JframeInicio(Usuario usuario) {
         initComponents();
+     
+        this.usuario = usuario;
         JPpanelcontenido.setLayout(new CardLayout());
         cardLayout = (CardLayout) JPpanelcontenido.getLayout();
 
@@ -30,7 +86,7 @@ public class JframeInicio extends javax.swing.JFrame {
         JPpanelcontenido.add(PanelMovimientos, "panelMovimientos");
         JPpanelcontenido.add(PanelMetas, "panelMetas");
         JPpanelcontenido.add(PanelExportarDatos, "panelExportarDatos");
-    
+
 
         btnInicio.addActionListener(e -> cardLayout.show(JPpanelcontenido, "panelInicio"));
         btnIngreso.addActionListener(e -> cardLayout.show(JPpanelcontenido, "panelIngresos"));
@@ -39,6 +95,14 @@ public class JframeInicio extends javax.swing.JFrame {
         btnMovimiento.addActionListener(e -> cardLayout.show(JPpanelcontenido, "panelMovimientos"));
         btnMetas.addActionListener(e -> cardLayout.show(JPpanelcontenido, "panelMetas"));
         btnExportarDatos.addActionListener(e -> cardLayout.show(JPpanelcontenido, "panelExportarDatos"));
+
+
+         try {
+        cargarCategorias();
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al cargar categorías: " + ex.getMessage());
+    }
 
     }
 
@@ -63,14 +127,12 @@ public class JframeInicio extends javax.swing.JFrame {
         PanelIngreso = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        txtingresocantidad = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButton2 = new javax.swing.JButton();
+        txtingresodescripcion = new javax.swing.JTextField();
+        cbxingrsocategoria = new javax.swing.JComboBox<>();
+        btningresoguardar = new javax.swing.JButton();
         PanelGastos = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -129,7 +191,7 @@ public class JframeInicio extends javax.swing.JFrame {
         lblNombre = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
         jLabel28 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btncomenzar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -193,44 +255,57 @@ public class JframeInicio extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
         jLabel1.setText("Nuevo Ingreso");
 
-        jLabel2.setText("Cantidad:");
+        jLabel2.setText("Monto:");
 
-        jLabel3.setText("Fecha:");
+        txtingresocantidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtingresocantidadActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Categoria:");
 
         jLabel5.setText("Descripción:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        txtingresodescripcion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtingresodescripcionActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Guardar");
+        cbxingrsocategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxingrsocategoriaActionPerformed(evt);
+            }
+        });
+
+        btningresoguardar.setText("Guardar");
+        btningresoguardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btningresoguardarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout PanelIngresoLayout = new javax.swing.GroupLayout(PanelIngreso);
         PanelIngreso.setLayout(PanelIngresoLayout);
         PanelIngresoLayout.setHorizontalGroup(
             PanelIngresoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelIngresoLayout.createSequentialGroup()
-                .addGap(60, 60, 60)
                 .addGroup(PanelIngresoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelIngresoLayout.createSequentialGroup()
+                        .addGap(60, 60, 60)
                         .addGroup(PanelIngresoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbxingrsocategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtingresodescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(629, Short.MAX_VALUE))
+                            .addComponent(txtingresocantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(PanelIngresoLayout.createSequentialGroup()
-                        .addGroup(PanelIngresoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))))
-            .addGroup(PanelIngresoLayout.createSequentialGroup()
-                .addGap(88, 88, 88)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(90, 90, 90)
+                        .addComponent(btningresoguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(629, Short.MAX_VALUE))
         );
         PanelIngresoLayout.setVerticalGroup(
             PanelIngresoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -240,22 +315,18 @@ public class JframeInicio extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtingresocantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbxingrsocategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(149, Short.MAX_VALUE))
+                .addComponent(txtingresodescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43)
+                .addComponent(btningresoguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(212, Short.MAX_VALUE))
         );
 
         JPpanelcontenido.add(PanelIngreso, "card3");
@@ -265,7 +336,7 @@ public class JframeInicio extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 48)); // NOI18N
         jLabel6.setText("Nuevo Gasto");
 
-        jLabel7.setText("Cantidad:");
+        jLabel7.setText("Monto");
 
         jLabel8.setText("Fecha:");
 
@@ -697,7 +768,7 @@ public class JframeInicio extends javax.swing.JFrame {
 
         jLabel28.setText("Controla los ingresos y gatos de manera sencilla");
 
-        jButton1.setText("Comenzar");
+        btncomenzar.setText("Comenzar");
 
         javax.swing.GroupLayout PanelnicioLayout = new javax.swing.GroupLayout(Panelnicio);
         Panelnicio.setLayout(PanelnicioLayout);
@@ -716,7 +787,7 @@ public class JframeInicio extends javax.swing.JFrame {
                             .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(PanelnicioLayout.createSequentialGroup()
                         .addGap(248, 248, 248)
-                        .addComponent(jButton1)))
+                        .addComponent(btncomenzar)))
                 .addContainerGap(293, Short.MAX_VALUE))
         );
         PanelnicioLayout.setVerticalGroup(
@@ -734,7 +805,7 @@ public class JframeInicio extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel28)
                 .addGap(81, 81, 81)
-                .addComponent(jButton1)
+                .addComponent(btncomenzar)
                 .addContainerGap(311, Short.MAX_VALUE))
         );
 
@@ -806,6 +877,85 @@ public class JframeInicio extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAnalisisFinanzasActionPerformed
 
+    private void txtingresocantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtingresocantidadActionPerformed
+
+    }//GEN-LAST:event_txtingresocantidadActionPerformed
+
+    private void cbxingrsocategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxingrsocategoriaActionPerformed
+    
+    }//GEN-LAST:event_cbxingrsocategoriaActionPerformed
+
+    private void txtingresodescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtingresodescripcionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtingresodescripcionActionPerformed
+
+    private void btningresoguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btningresoguardarActionPerformed
+      
+    try {
+        BigDecimal monto = new BigDecimal(txtingresocantidad.getText().trim());
+        String descripcion = txtingresodescripcion.getText().trim();
+
+        // Obtenemos la categoría seleccionada
+        Categoria seleccionada = (Categoria) cbxingrsocategoria.getSelectedItem();
+
+        // Crear nueva categoría si seleccionó "➕ Nueva categoría..."
+        if (seleccionada != null && seleccionada.getId() == -1) {
+            String nuevaCat = JOptionPane.showInputDialog(this, "Nombre de la nueva categoría:");
+            if (nuevaCat != null && !nuevaCat.trim().isEmpty()) {
+                CategoriaDaoImpl daoCat = new CategoriaDaoImpl();
+                int idNueva = daoCat.registrar(new Categoria(0, usuario.getId(), nuevaCat, "INGRESO"));
+                cargarCategorias(); // refresca el combo
+                
+                // Seleccionamos la nueva categoría
+                for (int i = 0; i < cbxingrsocategoria.getItemCount(); i++) {
+                    Categoria c = (Categoria) cbxingrsocategoria.getItemAt(i);
+                    if (c.getId() == idNueva) {
+                        cbxingrsocategoria.setSelectedIndex(i);
+                        seleccionada = c;
+                        break;
+                    }
+                }
+                JOptionPane.showMessageDialog(this, "Categoría creada: " + nuevaCat);
+            } else {
+                JOptionPane.showMessageDialog(this, "⚠️ No ingresaste un nombre válido para la categoría.");
+                return; // cancelar si no puso nada
+            }
+        }
+
+        if (seleccionada == null || seleccionada.getId() <= 0) {
+            JOptionPane.showMessageDialog(this, "⚠️ Selecciona una categoría válida.");
+            return;
+        }
+
+        // Registramos el ingreso
+        Movimiento m = new Movimiento();
+        m.setIdUsuario(usuario.getId());
+        m.setIdCategoria(seleccionada.getId());
+        m.setMonto(monto);
+        m.setCategoria(seleccionada.getNombre());
+        m.setDescripcion(descripcion);
+
+        MovimientoDaoImpl daoMov = new MovimientoDaoImpl();
+        int idGenerado = daoMov.registrarmovimiento(m);
+
+        if (idGenerado > 0) {
+            JOptionPane.showMessageDialog(this, "✅ Ingreso registrado con ID: " + idGenerado);
+            txtingresocantidad.setText("");
+            txtingresodescripcion.setText("");
+        } else {
+            JOptionPane.showMessageDialog(this, "❌ No se pudo registrar el ingreso");
+        }
+
+    } catch (NumberFormatException nfe) {
+        JOptionPane.showMessageDialog(this, "⚠️ Monto no válido.");
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "⚠️ Error: " + ex.getMessage());
+    }
+        
+    }//GEN-LAST:event_btningresoguardarActionPerformed
+
+    /**/
     /**
      * @param args the command line arguments
      */
@@ -836,7 +986,7 @@ public class JframeInicio extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JframeInicio().setVisible(true);
+                new JframeLogin().setVisible(true);
             }
         });
     }
@@ -859,9 +1009,10 @@ public class JframeInicio extends javax.swing.JFrame {
     public javax.swing.JButton btnInicio;
     public javax.swing.JButton btnMetas;
     public javax.swing.JButton btnMovimiento;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btncomenzar;
+    private javax.swing.JButton btningresoguardar;
+    private javax.swing.JComboBox<Categoria> cbxingrsocategoria;
     private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
@@ -869,7 +1020,6 @@ public class JframeInicio extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
@@ -898,7 +1048,6 @@ public class JframeInicio extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -911,15 +1060,14 @@ public class JframeInicio extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
     private javax.swing.JLabel lblNombre;
+    private javax.swing.JTextField txtingresocantidad;
+    private javax.swing.JTextField txtingresodescripcion;
     // End of variables declaration//GEN-END:variables
 }

@@ -13,7 +13,6 @@ import pe.edu.utp.financio.modelo.Movimiento;
  * @author User
  */
 public interface MovimientoDAO {
-    int registrarIngreso(Movimiento m) throws SQLException;
-    int registrarGasto(Movimiento m) throws SQLException;
+    int registrarmovimiento(Movimiento m) throws SQLException;
     List<Movimiento> listarPorUsuario(int idUsuario) throws SQLException;
 }

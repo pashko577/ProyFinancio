@@ -4,13 +4,16 @@
  */
 package pe.edu.utp.financio.service;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+
 
 /**
  *
  * @author User
  */
 public interface MovimientoService {
-     int registrarIngresoYRepartir(int idUsuario, int idCategoria, double monto, String desc) throws SQLException;
+     int registrarIngresoYRepartir(int idUsuario, int idCategoria, BigDecimal monto,String categoria, String desc,Timestamp fecha) throws SQLException;
 
 }

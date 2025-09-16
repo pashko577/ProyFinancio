@@ -4,6 +4,8 @@
  */
 package pe.edu.utp.financio.modelo;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
@@ -14,18 +16,26 @@ public class Movimiento {
     private int id;
     private int idUsuario;
     private int idCategoria;
-    private double monto;
+    private BigDecimal monto;
+    private String categoria;
     private String descripcion;
-    private LocalDateTime fecha;
+    private Timestamp fecha;
 
-    public Movimiento(int id, int idUsuario, int idCategoria, double monto, String descripcion, LocalDateTime fecha) {
+    public Movimiento() {
+    }
+
+    
+    public Movimiento(int id, int idUsuario, int idCategoria, BigDecimal monto, String categoria, String descripcion, Timestamp fecha) {
         this.id = id;
         this.idUsuario = idUsuario;
         this.idCategoria = idCategoria;
         this.monto = monto;
+        this.categoria = categoria;
         this.descripcion = descripcion;
         this.fecha = fecha;
     }
+
+
 
     public int getId() {
         return id;
@@ -51,12 +61,20 @@ public class Movimiento {
         this.idCategoria = idCategoria;
     }
 
-    public double getMonto() {
+    public BigDecimal getMonto() {
         return monto;
     }
 
-    public void setMonto(double monto) {
+    public void setMonto(BigDecimal monto) {
         this.monto = monto;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     public String getDescripcion() {
@@ -67,12 +85,13 @@ public class Movimiento {
         this.descripcion = descripcion;
     }
 
-    public LocalDateTime getFecha() {
+    public Timestamp getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDateTime fecha) {
+    public void setFecha(Timestamp fecha) {
         this.fecha = fecha;
     }
-    
+
+  
 }

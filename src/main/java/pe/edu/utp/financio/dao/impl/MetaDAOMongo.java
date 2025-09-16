@@ -6,6 +6,7 @@ package pe.edu.utp.financio.dao.impl;
 
 
 import com.mongodb.client.*;
+import java.math.BigDecimal;
 import org.bson.Document;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class MetaDAOMongo implements MetaDAO{
     }
 
     @Override
-    public void actualizarAcumulado(int idMeta, double monto) throws SQLException {
+    public void actualizarAcumulado(int idMeta, BigDecimal monto) throws SQLException {
         collection.updateOne(new Document("idMeta", idMeta),
                 new Document("$inc", new Document("acumulado", monto)));
     }

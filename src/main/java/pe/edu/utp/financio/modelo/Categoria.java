@@ -10,14 +10,23 @@ package pe.edu.utp.financio.modelo;
  */
 public class Categoria {
     private int id;
+    private int idUsuario;
     private String nombre;
     private String tipo; // "INGRESO" o "GASTO"
+
+    public Categoria(int id, int idUsuario, String nombre, String tipo) {
+        this.id = id;
+        this.idUsuario = idUsuario;
+        this.nombre = nombre;
+        this.tipo = tipo;
+    }
 
     public Categoria(int id, String nombre, String tipo) {
         this.id = id;
         this.nombre = nombre;
         this.tipo = tipo;
     }
+    
 
     public int getId() {
         return id;
@@ -25,6 +34,14 @@ public class Categoria {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getNombre() {
@@ -41,6 +58,12 @@ public class Categoria {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+  
+    @Override
+    public String toString() {
+        return nombre;
     }
     
 }

@@ -18,36 +18,39 @@ import pe.edu.utp.financio.util.Encriptacion;
 public class UsuarioDAOPostgres implements UsuarioDAO {
 
     @Override
-    public int registrar(Usuario usuario) throws SQLException {
-        String sql = "INSERT INTO usuarios (nombre, dni, correo, telefono, contrasena, rol) "
-                + "VALUES (?,?,?,?,?,?) RETURNING id_usuario";
+   public int registrar(Usuario u) throws SQLException {
+    String sql = "INSERT INTO usuarios (nombre, dni, correo, telefono, contrasena, rol, fecha_reg) " +
+                 "VALUES (?, ?, ?, ?, ?, ?, NOW()) RETURNING id_usuario";
 
-        try (Connection cn = ConexionPostgres.get(); PreparedStatement ps = cn.prepareStatement(sql)) {
+    try (Connection cn = ConexionPostgres.getConnection();
+         PreparedStatement ps = cn.prepareStatement(sql)) {
 
-            ps.setString(1, usuario.getNombre());
-            ps.setString(2, usuario.getDni());
-            ps.setString(3, usuario.getCorreo());
-            ps.setString(4, usuario.getTelefono());
+        // Encriptar contraseña antes de guardar
+        String hash = BCrypt.hashpw(u.getContrasenaHash(), BCrypt.gensalt());
 
-            // 🔐 Encriptar la contraseña con BCrypt
-            String hash = BCrypt.hashpw(usuario.getContrasenaHash(), BCrypt.gensalt());
-            ps.setString(5, hash);
+        ps.setString(1, u.getNombre());
+        ps.setString(2, u.getDni());
+        ps.setString(3, u.getCorreo());
+        ps.setString(4, u.getTelefono());
+        ps.setString(5, hash);
+        ps.setString(6, u.getRol());
 
-            ps.setString(6, usuario.getRol());
-
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("id_usuario");
-            }
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            int idGenerado = rs.getInt("id_usuario");
+            u.setId(idGenerado); // actualizar el objeto
+            return idGenerado;
         }
-        return -1;
     }
+    return -1; // por si algo falla
+}
+
 
     @Override
     public Usuario login(String dni, String contrasenaPlano) throws SQLException {
         String sql = "SELECT * FROM usuarios WHERE dni=?";
 
-        try (Connection cn = ConexionPostgres.get(); PreparedStatement ps = cn.prepareStatement(sql)) {
+        try (Connection cn = ConexionPostgres.getConnection(); PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setString(1, dni);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {

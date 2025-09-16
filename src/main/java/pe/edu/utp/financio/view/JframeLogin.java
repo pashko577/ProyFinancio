@@ -178,7 +178,8 @@ public class JframeLogin extends javax.swing.JFrame {
             if (usuario != null) {
                 JOptionPane.showMessageDialog(this,
                         "Bienvenido " + usuario.getNombre() + " (" + usuario.getRol() + ")");
-                JframeInicio frameInicio = new JframeInicio();
+               JframeInicio frameInicio = new JframeInicio(usuario);
+
 
                 if ("ADMIN".equalsIgnoreCase(usuario.getRol())) {
                     // 🔓 Admin tiene acceso a todo → no hacer nada
@@ -188,7 +189,6 @@ public class JframeLogin extends javax.swing.JFrame {
                     frameInicio.btnMetas.setEnabled(false);
                     frameInicio.btnExportarDatos.setEnabled(false);
                 }
-
                 frameInicio.setVisible(true);
                 this.dispose();
             } else {

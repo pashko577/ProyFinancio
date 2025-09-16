@@ -13,11 +13,19 @@ import java.sql.SQLException;
  * @author User
  */
 public class ConexionPostgres {
-     private static final String URL = "jdbc:postgresql://localhost:5432/financio";
+
+    private static final String URL = "jdbc:postgresql://localhost:5432/financio";
     private static final String USER = "postgres";
     private static final String PASS = "root";
 
-    public static Connection get() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASS);
+    public static Connection getConnection() {
+        try {
+            Class.forName("org.postgresql.Driver");
+            return DriverManager.getConnection(URL, USER, PASS);
+
+        } catch (Exception e) {
+            System.out.println("Error en la conexión: " + e.getMessage());
+            return null;
+        }
     }
 }

@@ -1,3 +1,5 @@
+pe\edu\utp\financio\dao\impl\CategoriaDaoImpl.class
+pe\edu\utp\financio\view\JframeInicio$15.class
 pe\edu\utp\financio\view\JframeInicio$10.class
 pe\edu\utp\financio\view\JframeLogin$3.class
 pe\edu\utp\financio\view\JframeLogin$1.class
@@ -13,6 +15,8 @@ pe\edu\utp\financio\test\PruebaMongoDB.class
 pe\edu\utp\financio\view\JframeInicio$2.class
 pe\edu\utp\financio\service\MovimientoService.class
 pe\edu\utp\financio\test\PruebaPostgreSQL.class
+pe\edu\utp\financio\view\JframeInicio$17.class
+pe\edu\utp\financio\view\JframeInicio$14.class
 pe\edu\utp\financio\util\ConexionMongo.class
 pe\edu\utp\financio\view\JframeInicio$7.class
 pe\edu\utp\financio\util\ConexionPostgres.class
@@ -22,11 +26,15 @@ pe\edu\utp\financio\view\JframeLogin.class
 pe\edu\utp\financio\service\impl\MovimientoServiceImpl.class
 pe\edu\utp\financio\view\JframeInicio$9.class
 pe\edu\utp\financio\view\JframeInicio$11.class
+pe\edu\utp\financio\dao\impl\MovimientoDaoImpl.class
+pe\edu\utp\financio\util\RegistrarUsuariosPruebas.class
+pe\edu\utp\financio\view\JframeInicio$16.class
 pe\edu\utp\financio\view\JframeLogin$2.class
 pe\edu\utp\financio\dao1\CategoriaDAO.class
 pe\edu\utp\financio\modelo\Movimiento.class
 pe\edu\utp\financio\view\JframeInicio$1.class
 pe\edu\utp\financio\dao1\UsuarioDAO.class
+pe\edu\utp\financio\view\JframeInicio$13.class
 pe\edu\utp\financio\view\JframeInicio$8.class
 pe\edu\utp\financio\view\JframeInicio$6.class
 pe\edu\utp\financio\dao1\AporteDAO.class

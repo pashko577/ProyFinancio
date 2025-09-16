@@ -4,6 +4,7 @@
  */
 package pe.edu.utp.financio.dao1;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 
 /**
@@ -11,6 +12,6 @@ import java.sql.SQLException;
  * @author User
  */
 public interface AporteDAO {
-        int registrarAporte(int idMeta, double monto) throws SQLException;
+        int registrarAporte(int idMeta, BigDecimal monto) throws SQLException;
 
 }

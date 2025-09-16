@@ -21,7 +21,7 @@ public class PruebaPostgreSQL {
     public static void main(String[] args) {
           String url = "jdbc:postgresql://localhost:5432/financio";
         String user = "postgres";
-        String pass = "Castro";
+        String pass = "root";
 
         try (Connection cn = DriverManager.getConnection(url, user, pass)) {
             System.out.println("✅ Conectado a PostgreSQL");
