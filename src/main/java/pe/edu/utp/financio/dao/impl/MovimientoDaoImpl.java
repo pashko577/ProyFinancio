@@ -25,7 +25,7 @@ public class MovimientoDaoImpl implements MovimientoDAO {
 
     @Override
     public List<Movimiento> listarPorUsuario(int idUsuario) throws SQLException {
-       String sql = "SELECT * FROM movimientos WHERE id_usuario = ? ORDER BY fecha DESC";
+       String sql = "SELECT * FROM movimientos WHERE id_usuario = ? ORDER BY id_movimiento ASC";
         List<Movimiento> lista = new ArrayList<>();
 
         try (Connection conn = ConexionPostgres.getConnection();
@@ -74,5 +74,17 @@ public class MovimientoDaoImpl implements MovimientoDAO {
         }
         return -1;
     }
+    
+    public int eliminarMovimiento(int idMovimiento) throws SQLException {
+    String sql = "DELETE FROM movimientos WHERE id_movimiento = ?";
+    
+    try (Connection conn = ConexionPostgres.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        
+        ps.setInt(1, idMovimiento);
+        return ps.executeUpdate(); // devuelve cantidad de filas eliminadas
+    }
+}
+
 
 }

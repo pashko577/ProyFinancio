@@ -14,6 +14,7 @@ pe\edu\utp\financio\dao1\MovimientoDAO.class
 pe\edu\utp\financio\test\PruebaMongoDB.class
 pe\edu\utp\financio\view\JframeInicio$2.class
 pe\edu\utp\financio\service\MovimientoService.class
+pe\edu\utp\financio\view\JframeInicio$19.class
 pe\edu\utp\financio\test\PruebaPostgreSQL.class
 pe\edu\utp\financio\view\JframeInicio$17.class
 pe\edu\utp\financio\view\JframeInicio$14.class
@@ -42,3 +43,4 @@ pe\edu\utp\financio\modelo\Meta.class
 pe\edu\utp\financio\modelo\Usuario.class
 pe\edu\utp\financio\view\JframeInicio$3.class
 pe\edu\utp\financio\modelo\Aporte.class
+pe\edu\utp\financio\view\JframeInicio$18.class
