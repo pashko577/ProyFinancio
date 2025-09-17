@@ -15,4 +15,5 @@ import pe.edu.utp.financio.modelo.Categoria;
 public interface CategoriaDAO {
     int registrar(Categoria categoria) throws SQLException;
     List<Categoria> listarPorUsuario(int idUsuario,String tipo) throws SQLException;
+    boolean existeCategoria(int idUsuario,String nombre, String tipo)throws SQLException;
 }

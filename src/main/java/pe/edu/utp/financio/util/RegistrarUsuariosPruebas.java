@@ -45,13 +45,13 @@ public class RegistrarUsuariosPruebas {
         int id = dao.registrar(admin);
         admin.setId(id);
         System.out.println("✅ Usuario ADMIN registrado con ID: " + id);
- // 🔹 Registrar categorías para este usuario
-        CategoriaDaoImpl catDao = new CategoriaDaoImpl();
-        catDao.registrar(new Categoria(0, admin.getId(), "Alimentos", "INGRESO"));
-        catDao.registrar(new Categoria(0, admin.getId(), "Transporte", "INGRESO"));
-        catDao.registrar(new Categoria(0, admin.getId(), "Salud", "INGRESO"));
-
-        System.out.println("✅ Categorías creadas para el usuario ADMIN");
+// // 🔹 Registrar categorías para este usuario
+//        CategoriaDaoImpl catDao = new CategoriaDaoImpl();
+//        catDao.registrar(new Categoria(0, admin.getId(), "Alimentos", "INGRESO"));
+//        catDao.registrar(new Categoria(0, admin.getId(), "Transporte", "INGRESO"));
+//        catDao.registrar(new Categoria(0, admin.getId(), "Salud", "INGRESO"));
+//
+//        System.out.println("✅ Categorías creadas para el usuario ADMIN");
 
     } catch (Exception e) {
         e.printStackTrace();

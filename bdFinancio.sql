@@ -1,3 +1,4 @@
+
 -- Tabla de usuarios
 CREATE TABLE usuarios (
     id_usuario SERIAL PRIMARY KEY,
@@ -22,7 +23,10 @@ CREATE TABLE categorias (
     nombre VARCHAR(100) NOT NULL,
     tipo VARCHAR(10) CHECK (tipo IN ('INGRESO','GASTO')) NOT NULL
 );
-SELECT * FROM categorias WHERE id_usuario = 4;
+SELECT * FROM categorias;
+ALTER TABLE categorias 
+ADD CONSTRAINT uq_categoria UNIQUE (id_usuario, nombre, tipo);
+
 
 -- Tabla de movimientos (ingresos y gastos)
 CREATE TABLE movimientos (
@@ -34,7 +38,8 @@ CREATE TABLE movimientos (
     descripcion TEXT,
     fecha TIMESTAMP DEFAULT NOW()
 );
-select*from movimientos;
+select*from movimientos m
+join categorias c on c.id_categoria = m.id_categoria;
 
 -- Tabla de aportes automáticos a metas
 CREATE TABLE aportes (

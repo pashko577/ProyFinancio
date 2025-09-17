@@ -37,45 +37,42 @@ public class JframeInicio extends javax.swing.JFrame {
     private Usuario usuario;
     CardLayout cardLayout;
     MovimientoDaoImpl daoMov = new MovimientoDaoImpl();
-    
 
-    
-   private void cargarCategorias() throws SQLException {
-    CategoriaDaoImpl dao = new CategoriaDaoImpl();
+    private void cargarCategorias() throws SQLException {
+         CategoriaDaoImpl dao = new CategoriaDaoImpl();
     List<Categoria> categoriasIngresos = dao.listarPorUsuario(usuario.getId(), "INGRESO");
+    List<Categoria> categoriasGastos = dao.listarPorUsuario(usuario.getId(), "GASTO");
 
     cbxingrsocategoria.removeAllItems();
+    cbxGastoCategoria.removeAllItems();
 
-    if (categoriasIngresos.isEmpty()) {
-        // Creamos 3 categorías de ejemplo automáticamente
-        String[] nombresDefault = {"Alimentos", "Transporte", "Salud"};
-        for (String nombre : nombresDefault) {
-            Categoria cat = new Categoria(0, usuario.getId(), nombre, "INGRESO");
-            int idGenerado = dao.registrar(cat);  // insert en BD
-            cat.setId(idGenerado);
-            categoriasIngresos.add(cat);
-            System.out.println("Se creó categoría por defecto: " + nombre + " con ID: " + idGenerado);
-        }
-    }
+   
 
-    // Llenamos el combo
+    // Llenar combos
     for (Categoria c : categoriasIngresos) {
         cbxingrsocategoria.addItem(c);
     }
+    for (Categoria cg : categoriasGastos) {
+        cbxGastoCategoria.addItem(cg);
+    }
 
     // Depuración
-    System.out.println("Categorías cargadas en el combo: " + categoriasIngresos.size());
-    for(Categoria c : categoriasIngresos){
+    System.out.println("Categorías INGRESO en combo: " + categoriasIngresos.size());
+    for (Categoria c : categoriasIngresos) {
         System.out.println(" -> " + c.getNombre());
     }
-}
 
+    System.out.println("Categorías GASTO en combo: " + categoriasGastos.size());
+    for (Categoria cg : categoriasGastos) {
+        System.out.println(" -> " + cg.getNombre());
+        }
+    }
 
     public JframeInicio(Usuario usuario) {
         initComponents();
-     
+
         this.usuario = usuario;
-        
+
         JPpanelcontenido.setLayout(new CardLayout());
         cardLayout = (CardLayout) JPpanelcontenido.getLayout();
 
@@ -87,7 +84,6 @@ public class JframeInicio extends javax.swing.JFrame {
         JPpanelcontenido.add(PanelMetas, "panelMetas");
         JPpanelcontenido.add(PanelExportarDatos, "panelExportarDatos");
 
-
         btnInicio.addActionListener(e -> cardLayout.show(JPpanelcontenido, "panelInicio"));
         btnIngreso.addActionListener(e -> cardLayout.show(JPpanelcontenido, "panelIngresos"));
         btnGastos.addActionListener(e -> cardLayout.show(JPpanelcontenido, "panelGastos"));
@@ -96,14 +92,14 @@ public class JframeInicio extends javax.swing.JFrame {
         btnMetas.addActionListener(e -> cardLayout.show(JPpanelcontenido, "panelMetas"));
         btnExportarDatos.addActionListener(e -> cardLayout.show(JPpanelcontenido, "panelExportarDatos"));
 
-
-         try {
-        cargarCategorias();
-        cargarIngresos();
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al cargar categorías: " + ex.getMessage());
-    }
+        try {
+            cargarCategorias();
+            cargarIngresos();
+            cargarGastos();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al cargar categorías: " + ex.getMessage());
+        }
 
     }
 
@@ -141,14 +137,16 @@ public class JframeInicio extends javax.swing.JFrame {
         PanelGastos = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
+        txtGastoMonto = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jButton3 = new javax.swing.JButton();
+        txtGastoDescripcion = new javax.swing.JTextField();
+        cbxGastoCategoria = new javax.swing.JComboBox<>();
+        btnGastoGuardar = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblGastos = new javax.swing.JTable();
+        btnGastoAgrCategoria = new javax.swing.JButton();
+        btnGastoEliminar = new javax.swing.JButton();
         PanelAnalisisFinanzas = new javax.swing.JPanel();
         PanelMovimientos = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
@@ -389,15 +387,43 @@ public class JframeInicio extends javax.swing.JFrame {
 
         jLabel7.setText("Monto");
 
-        jLabel8.setText("Fecha:");
-
         jLabel9.setText("Categoria:");
 
         jLabel10.setText("Descripción:");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        btnGastoGuardar.setText("Guardar");
+        btnGastoGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGastoGuardarActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Guardar");
+        tblGastos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane4.setViewportView(tblGastos);
+
+        btnGastoAgrCategoria.setText("Agregar Categoria");
+        btnGastoAgrCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGastoAgrCategoriaActionPerformed(evt);
+            }
+        });
+
+        btnGastoEliminar.setText("Eliminar");
+        btnGastoEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGastoEliminarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout PanelGastosLayout = new javax.swing.GroupLayout(PanelGastos);
         PanelGastos.setLayout(PanelGastosLayout);
@@ -406,25 +432,27 @@ public class JframeInicio extends javax.swing.JFrame {
             .addGroup(PanelGastosLayout.createSequentialGroup()
                 .addGap(60, 60, 60)
                 .addGroup(PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtGastoMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbxGastoCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtGastoDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(PanelGastosLayout.createSequentialGroup()
-                        .addGroup(PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(665, Short.MAX_VALUE))
+                        .addGap(29, 29, 29)
+                        .addComponent(btnGastoGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel6))
+                .addGroup(PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelGastosLayout.createSequentialGroup()
-                        .addGroup(PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))))
-            .addGroup(PanelGastosLayout.createSequentialGroup()
-                .addGap(89, 89, 89)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGastoAgrCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(btnGastoEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelGastosLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(127, 127, 127))))
         );
         PanelGastosLayout.setVerticalGroup(
             PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -434,22 +462,29 @@ public class JframeInicio extends javax.swing.JFrame {
                 .addGap(29, 29, 29)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(155, Short.MAX_VALUE))
+                .addGroup(PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelGastosLayout.createSequentialGroup()
+                        .addComponent(txtGastoMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cbxGastoCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtGastoDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(61, 61, 61)
+                        .addGroup(PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(PanelGastosLayout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(btnGastoGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btnGastoEliminar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(PanelGastosLayout.createSequentialGroup()
+                                    .addGap(1, 1, 1)
+                                    .addComponent(btnGastoAgrCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(193, Short.MAX_VALUE))
         );
 
         JPpanelcontenido.add(PanelGastos, "card4");
@@ -933,7 +968,7 @@ public class JframeInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_txtingresocantidadActionPerformed
 
     private void cbxingrsocategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxingrsocategoriaActionPerformed
-    
+
     }//GEN-LAST:event_cbxingrsocategoriaActionPerformed
 
     private void txtingresodescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtingresodescripcionActionPerformed
@@ -941,105 +976,104 @@ public class JframeInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_txtingresodescripcionActionPerformed
 
     private void btningresoguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btningresoguardarActionPerformed
-      
-    try {
-        BigDecimal monto = new BigDecimal(txtingresocantidad.getText().trim());
-        String descripcion = txtingresodescripcion.getText().trim();
 
-        // Obtenemos la categoría seleccionada
-        Categoria seleccionada = (Categoria) cbxingrsocategoria.getSelectedItem();
+        try {
+            BigDecimal monto = new BigDecimal(txtingresocantidad.getText().trim());
+            String descripcion = txtingresodescripcion.getText().trim();
 
-        // Crear nueva categoría si seleccionó "➕ Nueva categoría..."
-        if (seleccionada != null && seleccionada.getId() == -1) {
-            String nuevaCat = JOptionPane.showInputDialog(this, "Nombre de la nueva categoría:");
-            if (nuevaCat != null && !nuevaCat.trim().isEmpty()) {
-                CategoriaDaoImpl daoCat = new CategoriaDaoImpl();
-                int idNueva = daoCat.registrar(new Categoria(0, usuario.getId(), nuevaCat, "INGRESO"));
-                cargarCategorias(); // refresca el combo
-                
-                // Seleccionamos la nueva categoría
-                for (int i = 0; i < cbxingrsocategoria.getItemCount(); i++) {
-                    Categoria c = (Categoria) cbxingrsocategoria.getItemAt(i);
-                    if (c.getId() == idNueva) {
-                        cbxingrsocategoria.setSelectedIndex(i);
-                        seleccionada = c;
-                        break;
+            // Obtenemos la categoría seleccionada
+            Categoria seleccionada = (Categoria) cbxingrsocategoria.getSelectedItem();
+
+            // Crear nueva categoría si seleccionó "➕ Nueva categoría..."
+            if (seleccionada != null && seleccionada.getId() == -1) {
+                String nuevaCat = JOptionPane.showInputDialog(this, "Nombre de la nueva categoría:");
+                if (nuevaCat != null && !nuevaCat.trim().isEmpty()) {
+                    CategoriaDaoImpl daoCat = new CategoriaDaoImpl();
+                    int idNueva = daoCat.registrar(new Categoria(0, usuario.getId(), nuevaCat, "INGRESO"));
+                    cargarCategorias(); // refresca el combo
+
+                    // Seleccionamos la nueva categoría
+                    for (int i = 0; i < cbxingrsocategoria.getItemCount(); i++) {
+                        Categoria c = (Categoria) cbxingrsocategoria.getItemAt(i);
+                        if (c.getId() == idNueva) {
+                            cbxingrsocategoria.setSelectedIndex(i);
+                            seleccionada = c;
+                            break;
+                        }
                     }
+                    JOptionPane.showMessageDialog(this, "Categoría creada: " + nuevaCat);
+                } else {
+                    JOptionPane.showMessageDialog(this, "⚠️ No ingresaste un nombre válido para la categoría.");
+                    return; // cancelar si no puso nada
                 }
-                JOptionPane.showMessageDialog(this, "Categoría creada: " + nuevaCat);
-            } else {
-                JOptionPane.showMessageDialog(this, "⚠️ No ingresaste un nombre válido para la categoría.");
-                return; // cancelar si no puso nada
             }
+
+            if (seleccionada == null || seleccionada.getId() <= 0) {
+                JOptionPane.showMessageDialog(this, "⚠️ Selecciona una categoría válida.");
+                return;
+            }
+
+            // Registramos el ingreso
+            Movimiento m = new Movimiento();
+            m.setIdUsuario(usuario.getId());
+            m.setIdCategoria(seleccionada.getId());
+            m.setMonto(monto);
+            m.setCategoria(seleccionada.getNombre());
+            m.setDescripcion(descripcion);
+
+            MovimientoDaoImpl daoMov = new MovimientoDaoImpl();
+            int idGenerado = daoMov.registrarmovimiento(m);
+
+            if (idGenerado > 0) {
+                JOptionPane.showMessageDialog(this, "✅ Ingreso registrado con ID: " + idGenerado);
+                txtingresocantidad.setText("");
+                txtingresodescripcion.setText("");
+
+                //recargar la tabla desde la BD
+                cargarIngresos();
+            } else {
+                JOptionPane.showMessageDialog(this, "❌ No se pudo registrar el ingreso");
+            }
+
+        } catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(this, "⚠️ Monto no válido.");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "⚠️ Error: " + ex.getMessage());
         }
 
-        if (seleccionada == null || seleccionada.getId() <= 0) {
-            JOptionPane.showMessageDialog(this, "⚠️ Selecciona una categoría válida.");
-            return;
-        }
 
-        // Registramos el ingreso
-        Movimiento m = new Movimiento();
-        m.setIdUsuario(usuario.getId());
-        m.setIdCategoria(seleccionada.getId());
-        m.setMonto(monto);
-        m.setCategoria(seleccionada.getNombre());
-        m.setDescripcion(descripcion);
-
-        MovimientoDaoImpl daoMov = new MovimientoDaoImpl();
-        int idGenerado = daoMov.registrarmovimiento(m);
-
-        if (idGenerado > 0) {
-            JOptionPane.showMessageDialog(this, "✅ Ingreso registrado con ID: " + idGenerado);
-            txtingresocantidad.setText("");
-            txtingresodescripcion.setText("");
-            
-            //recargar la tabla desde la BD
-            cargarIngresos();
-        } else {
-            JOptionPane.showMessageDialog(this, "❌ No se pudo registrar el ingreso");
-        }
-
-    } catch (NumberFormatException nfe) {
-        JOptionPane.showMessageDialog(this, "⚠️ Monto no válido.");
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "⚠️ Error: " + ex.getMessage());
-    }
-    
-    
-        
     }//GEN-LAST:event_btningresoguardarActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        String nuevaCat= JOptionPane.showInputDialog(this, "Nombre de la nueva Categoria:");
-        if(nuevaCat != null && !nuevaCat.trim().isEmpty()){
-            try{
-                CategoriaDaoImpl daoCat= new CategoriaDaoImpl();
+        String nuevaCat = JOptionPane.showInputDialog(this, "Nombre de la nueva Categoria:");
+        if (nuevaCat != null && !nuevaCat.trim().isEmpty()) {
+            try {
+                CategoriaDaoImpl daoCat = new CategoriaDaoImpl();
                 int idNueva = daoCat.registrar(new Categoria(0, usuario.getId(), nuevaCat, "INGRESO"));
-                
+
                 //refrescamos
                 cargarCategorias();
-                
+
                 //seleccionamos automaticamente la nueva categoria creada
-                for(int i=0; i<cbxingrsocategoria.getItemCount(); i++) {
+                for (int i = 0; i < cbxingrsocategoria.getItemCount(); i++) {
                     Categoria c = (Categoria) cbxingrsocategoria.getItemAt(i);
-                    if(c.getId() == idNueva){
+                    if (c.getId() == idNueva) {
                         cbxingrsocategoria.setSelectedIndex(i);
                         break;
                     }
                 }
                 JOptionPane.showMessageDialog(this, "Categoria creada: " + nuevaCat);
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Error al crear categoria: " + ex.getMessage());
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(this, "No ingresaste un nombre valido.");
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-                                       
+
         int fila = tblIngreso.getSelectedRow();
 
         if (fila >= 0) {
@@ -1055,7 +1089,7 @@ public class JframeInicio extends javax.swing.JFrame {
 
             if (confirm == JOptionPane.YES_OPTION) {
                 try {
-                    
+
                     int filasEliminadas = daoMov.eliminarMovimiento(id);
 
                     if (filasEliminadas > 0) {
@@ -1072,22 +1106,153 @@ public class JframeInicio extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "⚠️ Selecciona un ingreso primero.");
         }
-    
+
 
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void cargarIngresos(){
-        try{
+    private void btnGastoAgrCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGastoAgrCategoriaActionPerformed
+        String nuevaCat = JOptionPane.showInputDialog(this, "Nombre de la nueva Categoria:");
+        if (nuevaCat != null && !nuevaCat.trim().isEmpty()) {
+            try {
+                CategoriaDaoImpl daoCat = new CategoriaDaoImpl();
+                int idNueva = daoCat.registrar(new Categoria(0, usuario.getId(), nuevaCat, "GASTO"));
+
+                //refrescamos
+                cargarCategorias();
+
+                //seleccionamos automaticamente la nueva categoria creada
+                for (int i = 0; i < cbxGastoCategoria.getItemCount(); i++) {
+                    Categoria c = (Categoria) cbxGastoCategoria.getItemAt(i);
+                    if (c.getId() == idNueva) {
+                        cbxGastoCategoria.setSelectedIndex(i);
+                        break;
+                    }
+                }
+                JOptionPane.showMessageDialog(this, "Categoria creada: " + nuevaCat);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error al crear categoria: " + ex.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No ingresaste un nombre valido.");
+        }
+    }//GEN-LAST:event_btnGastoAgrCategoriaActionPerformed
+
+    private void btnGastoEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGastoEliminarActionPerformed
+        int fila = tblGastos.getSelectedRow();
+
+        if (fila >= 0) {
+            // ID está en la primera columna
+            int id = Integer.parseInt(tblGastos.getValueAt(fila, 0).toString());
+
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Seguro que deseas eliminar el ingreso con ID " + id + "?",
+                    "Confirmar eliminación",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+
+                    int filasEliminadas = daoMov.eliminarMovimiento(id);
+
+                    if (filasEliminadas > 0) {
+                        JOptionPane.showMessageDialog(this, "✅ Ingreso eliminado correctamente.");
+                        cargarGastos(); // 👈 refresca toda la tabla
+                    } else {
+                        JOptionPane.showMessageDialog(this, "⚠️ No se encontró el ingreso con ID: " + id);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "⚠️ Error al eliminar: " + ex.getMessage());
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "⚠️ Selecciona un ingreso primero.");
+        }
+
+    }//GEN-LAST:event_btnGastoEliminarActionPerformed
+
+    private void btnGastoGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGastoGuardarActionPerformed
+        try {
+            BigDecimal monto = new BigDecimal(txtGastoMonto.getText().trim());
+            String descripcion = txtGastoDescripcion.getText().trim();
+
+            // Obtenemos la categoría seleccionada
+            Categoria seleccionada = (Categoria) cbxGastoCategoria.getSelectedItem();
+
+            // Crear nueva categoría si seleccionó "➕ Nueva categoría..."
+            if (seleccionada != null && seleccionada.getId() == -1) {
+                String nuevaCat = JOptionPane.showInputDialog(this, "Nombre de la nueva categoría:");
+                if (nuevaCat != null && !nuevaCat.trim().isEmpty()) {
+                    CategoriaDaoImpl daoCat = new CategoriaDaoImpl();
+                    int idNueva = daoCat.registrar(new Categoria(0, usuario.getId(), nuevaCat, "GASTO"));
+                    cargarCategorias(); // refresca el combo
+
+                    // Seleccionamos la nueva categoría
+                    for (int i = 0; i < cbxGastoCategoria.getItemCount(); i++) {
+                        Categoria c = (Categoria) cbxGastoCategoria.getItemAt(i);
+                        if (c.getId() == idNueva) {
+                            cbxGastoCategoria.setSelectedIndex(i);
+                            seleccionada = c;
+                            break;
+                        }
+                    }
+                    JOptionPane.showMessageDialog(this, "Categoría creada: " + nuevaCat);
+                } else {
+                    JOptionPane.showMessageDialog(this, "⚠️ No ingresaste un nombre válido para la categoría.");
+                    return; // cancelar si no puso nada
+                }
+            }
+
+            if (seleccionada == null || seleccionada.getId() <= 0) {
+                JOptionPane.showMessageDialog(this, "⚠️ Selecciona una categoría válida.");
+                return;
+            }
+
+            // Registramos el ingreso
+            Movimiento m = new Movimiento();
+            m.setIdUsuario(usuario.getId());
+            m.setIdCategoria(seleccionada.getId());
+            m.setMonto(monto);
+            m.setCategoria(seleccionada.getNombre());
+            m.setDescripcion(descripcion);
+
+            MovimientoDaoImpl daoMov = new MovimientoDaoImpl();
+            int idGenerado = daoMov.registrarmovimiento(m);
+
+            if (idGenerado > 0) {
+                JOptionPane.showMessageDialog(this, "✅ Ingreso registrado con ID: " + idGenerado);
+                txtGastoMonto.setText("");
+                txtGastoDescripcion.setText("");
+
+                //recargar la tabla desde la BD
+                cargarGastos();
+            } else {
+                JOptionPane.showMessageDialog(this, "❌ No se pudo registrar el ingreso");
+            }
+
+        } catch (NumberFormatException nfe) {
+            JOptionPane.showMessageDialog(this, "⚠️ Monto no válido.");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "⚠️ Error: " + ex.getMessage());
+        }
+
+
+    }//GEN-LAST:event_btnGastoGuardarActionPerformed
+
+    private void cargarIngresos() {
+        try {
             //obtener el modelo de la tabla
             DefaultTableModel modelo = (DefaultTableModel) tblIngreso.getModel();
             modelo.setRowCount(0); //limpiar filas previas
-            
+
             //obtener lista desde la BD
-            
-            List<Movimiento> lista = daoMov.listarPorUsuario(usuario.getId());
-            
+            List<Movimiento> lista = daoMov.listarIngresosPorUsuario(usuario.getId());
+
             //agregar cada ingreso a la tabla
-            for(Movimiento m : lista){
+            for (Movimiento m : lista) {
                 modelo.addRow(new Object[]{
                     m.getId(),
                     m.getCategoria(),
@@ -1095,11 +1260,36 @@ public class JframeInicio extends javax.swing.JFrame {
                     m.getMonto()
                 });
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "⚠ Error al cargar ingresos: " + ex.getMessage());
         }
     }
+
+    private void cargarGastos() {
+        try {
+            //obtener el modelo de la tabla
+            DefaultTableModel modelo = (DefaultTableModel) tblGastos.getModel();
+            modelo.setRowCount(0); //limpiar filas previas
+
+            //obtener lista desde la BD
+            List<Movimiento> lista = daoMov.listarGastosPorUsuario(usuario.getId());
+
+            //agregar cada ingreso a la tabla
+            for (Movimiento m : lista) {
+                modelo.addRow(new Object[]{
+                    m.getId(),
+                    m.getCategoria(),
+                    m.getDescripcion(),
+                    m.getMonto()
+                });
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "⚠ Error al cargar ingresos: " + ex.getMessage());
+        }
+    }
+
     /**/
     /**
      * @param args the command line arguments
@@ -1151,6 +1341,9 @@ public class JframeInicio extends javax.swing.JFrame {
     public javax.swing.JButton btnAnalisisFinanzas;
     private javax.swing.JButton btnEliminar;
     public javax.swing.JButton btnExportarDatos;
+    private javax.swing.JButton btnGastoAgrCategoria;
+    private javax.swing.JButton btnGastoEliminar;
+    private javax.swing.JButton btnGastoGuardar;
     public javax.swing.JButton btnGastos;
     public javax.swing.JButton btnIngreso;
     public javax.swing.JButton btnInicio;
@@ -1158,16 +1351,15 @@ public class JframeInicio extends javax.swing.JFrame {
     public javax.swing.JButton btnMovimiento;
     private javax.swing.JButton btncomenzar;
     private javax.swing.JButton btningresoguardar;
+    private javax.swing.JComboBox<Categoria> cbxGastoCategoria;
     private javax.swing.JComboBox<Categoria> cbxingrsocategoria;
     private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
     private com.toedter.calendar.JDateChooser jDateChooser1;
@@ -1199,23 +1391,23 @@ public class JframeInicio extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
     private javax.swing.JLabel lblNombre;
+    private javax.swing.JTable tblGastos;
     private javax.swing.JTable tblIngreso;
+    private javax.swing.JTextField txtGastoDescripcion;
+    private javax.swing.JTextField txtGastoMonto;
     private javax.swing.JTextField txtingresocantidad;
     private javax.swing.JTextField txtingresodescripcion;
     // End of variables declaration//GEN-END:variables

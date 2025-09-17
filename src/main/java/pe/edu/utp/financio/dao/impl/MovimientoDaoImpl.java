@@ -86,5 +86,59 @@ public class MovimientoDaoImpl implements MovimientoDAO {
     }
 }
 
+    @Override
+    public List<Movimiento> listarIngresosPorUsuario(int idUsuario) throws SQLException {
+ String sql = """
+        SELECT m.id_movimiento, m.id_usuario, m.id_categoria, m.monto,
+               c.nombre AS categoria, m.descripcion, m.fecha
+        FROM movimientos m
+        JOIN categorias c ON m.id_categoria = c.id_categoria
+        WHERE m.id_usuario = ? AND c.tipo = 'INGRESO'
+        ORDER BY m.id_movimiento ASC
+    """;
+
+    return obtenerMovimientos(idUsuario, sql);
+}
+    
+
+    @Override
+    public List<Movimiento> listarGastosPorUsuario(int idUsuario) throws SQLException {
+String sql = """
+        SELECT m.id_movimiento, m.id_usuario, m.id_categoria, m.monto,
+               c.nombre AS categoria, m.descripcion, m.fecha
+        FROM movimientos m
+        JOIN categorias c ON m.id_categoria = c.id_categoria
+        WHERE m.id_usuario = ? AND c.tipo = 'GASTO'
+        ORDER BY m.id_movimiento ASC
+    """;
+
+    return obtenerMovimientos(idUsuario, sql);
+    }
+
+    @Override
+    public List<Movimiento> obtenerMovimientos(int idUsuario, String sql) throws SQLException {
+  List<Movimiento> lista = new ArrayList<>();
+    try (Connection conn = ConexionPostgres.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, idUsuario);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Movimiento m = new Movimiento(
+                rs.getInt("id_movimiento"),
+                rs.getInt("id_usuario"),
+                rs.getInt("id_categoria"),
+                rs.getBigDecimal("monto"),
+                rs.getString("categoria"),
+                rs.getString("descripcion"),
+                rs.getTimestamp("fecha")
+            );
+            lista.add(m);
+        }
+    }
+    return lista;
+    }
+
 
 }
