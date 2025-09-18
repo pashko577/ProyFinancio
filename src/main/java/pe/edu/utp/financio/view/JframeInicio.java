@@ -10,18 +10,12 @@ import java.awt.Panel;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
-
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
 import pe.edu.utp.financio.dao.impl.CategoriaDaoImpl;
 import pe.edu.utp.financio.dao.impl.MovimientoDaoImpl;
-
-import pe.edu.utp.financio.dao1.MovimientoDAO;
 import pe.edu.utp.financio.modelo.Categoria;
 import pe.edu.utp.financio.modelo.Movimiento;
 import pe.edu.utp.financio.modelo.Usuario;
@@ -37,68 +31,23 @@ public class JframeInicio extends javax.swing.JFrame {
     /**
      * Creates new form JframeInicio
      */
-    
-    
-    
-    
     private Usuario usuario;
     CardLayout cardLayout;
     private MovimientoService movimientoService = new MovimientoServiceImpl();
     MovimientoDaoImpl daoMov = new MovimientoDaoImpl();
-    
-    
-    
-
-
-
-    private void cargarCategorias() throws SQLException {
-        CategoriaDaoImpl dao = new CategoriaDaoImpl();
-        List<Categoria> categoriasIngresos = dao.listarPorUsuario(usuario.getId(), "INGRESO");
-        List<Categoria> categoriasGastos = dao.listarPorUsuario(usuario.getId(), "GASTO");
-
-        cbxingrsocategoria.removeAllItems();
-        cbxGastoCategoria.removeAllItems();
-
-
-
-    // Llenar combos
-    for (Categoria c : categoriasIngresos) {
-        cbxingrsocategoria.addItem(c);
-    }
-    for (Categoria cg : categoriasGastos) {
-        cbxGastoCategoria.addItem(cg);
-    }
-
-    // Depuración
-    System.out.println("Categorías INGRESO en combo: " + categoriasIngresos.size());
-    for (Categoria c : categoriasIngresos) {
-        System.out.println(" -> " + c.getNombre());
-    }
-
-    System.out.println("Categorías GASTO en combo: " + categoriasGastos.size());
-    for (Categoria cg : categoriasGastos) {
-        System.out.println(" -> " + cg.getNombre());
-        }
-    }
 
     public JframeInicio(Usuario usuario) {
         initComponents();
-        
-        
-        
-        
         // Configurar columnas de la tabla de movimientos
         DefaultTableModel modeloMovimientos = new DefaultTableModel(
                 new Object[]{"Fecha", "Tipo", "Categoría", "Descripción", "Monto"}, 0
         );
         tblMovimientos.setModel(modeloMovimientos);
-        
         // Acción del botón Movimiento
-    btnMovimiento.addActionListener(e -> {
-        cardLayout.show(JPpanelcontenido, "panelMovimientos");
-        cargarMovimientos(); // 👈 cargar datos en la tabla
-    });
-
+        btnMovimiento.addActionListener(e -> {
+            cardLayout.show(JPpanelcontenido, "panelMovimientos");
+            cargarMovimientos(); // 👈 cargar datos en la tabla
+        });
 
         this.usuario = usuario;
 
@@ -121,7 +70,26 @@ public class JframeInicio extends javax.swing.JFrame {
         btnMetas.addActionListener(e -> cardLayout.show(JPpanelcontenido, "panelMetas"));
         btnExportarDatos.addActionListener(e -> cardLayout.show(JPpanelcontenido, "panelExportarDatos"));
 
+        btnMovimiento.addActionListener(e -> {
+            cardLayout.show(JPpanelcontenido, "panelMovimientos");
+            cargarMovimientos(); // 👈 aquí cargas la tabla de movimientos
+        });
+        btnMetas.addActionListener(e -> cardLayout.show(JPpanelcontenido, "panelMetas"));
+        btnExportarDatos.addActionListener(e -> cardLayout.show(JPpanelcontenido, "panelExportarDatos"));
+
+        // Aquí enganchas el listener al combo de tipo
+        cbxTipo.addActionListener(e -> {
+            try {
+                cargarCategoriasFiltro();
+//           cargarMovimientos();  // para que se actualize al hacer click
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error al cargar categorías: " + ex.getMessage());
+            }
+        });
+
         try {
+            cargarCategoriasFiltro();
             cargarCategorias();
             cargarIngresos();
             cargarGastos();
@@ -182,10 +150,10 @@ public class JframeInicio extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblMovimientos = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jdcFecha1 = new com.toedter.calendar.JDateChooser();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        jdcFecha2 = new com.toedter.calendar.JDateChooser();
         cbxTipo = new javax.swing.JComboBox<>();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
@@ -495,25 +463,25 @@ public class JframeInicio extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelGastosLayout.createSequentialGroup()
-                        .addComponent(txtGastoMonto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel9)
-                        .addGap(18, 18, 18)
-                        .addComponent(cbxGastoCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel10)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtGastoDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelGastosLayout.createSequentialGroup()
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 136, Short.MAX_VALUE))
-                    .addGroup(PanelGastosLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnGastoAgrCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnGastoGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnGastoEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnGastoEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(PanelGastosLayout.createSequentialGroup()
+                        .addGroup(PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PanelGastosLayout.createSequentialGroup()
+                                .addComponent(txtGastoMonto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel9)
+                                .addGap(18, 18, 18)
+                                .addComponent(cbxGastoCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel10)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtGastoDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 136, Short.MAX_VALUE)))
                 .addGap(157, 157, 157))
         );
 
@@ -557,6 +525,11 @@ public class JframeInicio extends javax.swing.JFrame {
         jLabel13.setText("a");
 
         cbxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Ingresos", "Egresos", " " }));
+        cbxTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbxTipoActionPerformed(evt);
+            }
+        });
 
         jLabel14.setText("Tipo movimiento:");
 
@@ -588,58 +561,65 @@ public class JframeInicio extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(636, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cbxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel15)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel13)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(cbxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(jLabel15))
-                        .addGap(36, 36, 36)
+                                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jdcFecha1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cbxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel13)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jdcFecha2, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE))))
-                .addContainerGap(334, Short.MAX_VALUE))
+                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(208, 208, 208))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel15)
-                .addGap(7, 7, 7)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(15, 15, 15)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cbxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(21, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(btnBuscar)
-                .addGap(83, 83, 83))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(68, 68, 68)
+                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnBuscar)
+                                .addGap(62, 62, 62)))
+                        .addGap(6, 6, 6))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel15)
+                        .addGap(7, 7, 7)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jdcFecha2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jdcFecha1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(15, 15, 15)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout PanelMovimientosLayout = new javax.swing.GroupLayout(PanelMovimientos);
@@ -957,7 +937,7 @@ public class JframeInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIngresoActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        limpiarFiltros();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
@@ -1280,8 +1260,12 @@ public class JframeInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGastoGuardarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-       cargarMovimientos();
+        cargarMovimientos();
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void cbxTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxTipoActionPerformed
+
+    }//GEN-LAST:event_cbxTipoActionPerformed
 
     private void cargarIngresos() {
         try {
@@ -1330,133 +1314,131 @@ public class JframeInicio extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "⚠ Error al cargar ingresos: " + ex.getMessage());
         }
     }
-    
-    /*private void cargarMovimientos() {
-    try {
-        DefaultTableModel modelo = (DefaultTableModel) tblMovimientos.getModel();
-        modelo.setRowCount(0); // limpiar filas previas
 
-        String opcion = (String) cbxTipo.getSelectedItem(); 
-        List<Movimiento> lista;
-
-        if ("Ingresos".equals(opcion)) {
-            lista = movimientoService.listarIngresosPorUsuario(usuario.getId());
-        } else if ("Egreso".equals(opcion)) {
-            lista = movimientoService.listarGastosPorUsuario(usuario.getId());
-        } else {
-            lista = movimientoService.listarPorUsuario(usuario.getId());
-        }
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-        for (Movimiento m : lista) {
-            String fechaFormateada = m.getFecha().toLocalDateTime().format(formatter);
-
-            modelo.addRow(new Object[]{
-                fechaFormateada,
-                m.getTipo(),
-                m.getCategoria(),
-                m.getDescripcion(),
-                m.getMonto()
-            });
-        }
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "⚠ Error al cargar movimientos: " + ex.getMessage());
-    }
-}*/
-    /*private void cargarMovimientos() {
-    try {
-        DefaultTableModel modelo = (DefaultTableModel) tblMovimientos.getModel();
-        modelo.setRowCount(0); // limpiar filas previas
-
-        // Leer opción del ComboBox
-        String opcion = (String) cbxTipo.getSelectedItem(); 
-        List<Movimiento> lista;
-
-        if ("Ingresos".equals(opcion)) {
-            lista = movimientoService.listarIngresosPorUsuario(usuario.getId());
-        } else if ("Egresos".equals(opcion)) {
-            lista = movimientoService.listarGastosPorUsuario(usuario.getId());
-        } else { // "Todos"
-            lista = movimientoService.listarPorUsuario(usuario.getId());
-        }
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-        for (Movimiento m : lista) {
-            String fechaFormateada = m.getFecha().toLocalDateTime().format(formatter);
-
-            modelo.addRow(new Object[]{
-                fechaFormateada,
-                m.getTipo(),
-                m.getCategoria(),
-                m.getDescripcion(),
-                m.getMonto()
-            });
-        }
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "⚠ Error al cargar movimientos: " + ex.getMessage());
-    }
-}*/
-    
     private void cargarMovimientos() {
-    try {
-        DefaultTableModel modelo = (DefaultTableModel) tblMovimientos.getModel();
-        modelo.setRowCount(0); // limpiar filas previas
+        try {
+            DefaultTableModel modelo = (DefaultTableModel) tblMovimientos.getModel();
+            modelo.setRowCount(0); // limpiar filas previas
 
-        // Obtenemos valores seleccionados de los combos
-        String opcionTipo = (String) cbxTipo.getSelectedItem();
-        String opcionCategoria = (String) cbxCategoria.getSelectedItem();
+            // Obtenemos valores seleccionados de los combos
+            String opcionTipo = (String) cbxTipo.getSelectedItem();
+            String opcionCategoria = (String) cbxCategoria.getSelectedItem();
 
-        List<Movimiento> lista;
+            List<Movimiento> lista;
 
-        // Filtrado por tipo
-        if ("Ingresos".equals(opcionTipo)) {
-            lista = movimientoService.listarIngresosPorUsuario(usuario.getId());
-        } else if ("Egresos".equals(opcionTipo)) {
-            lista = movimientoService.listarGastosPorUsuario(usuario.getId());
-        } else {
-            lista = movimientoService.listarPorUsuario(usuario.getId()); // Todos
+            // Filtrado por tipo
+            if ("Ingresos".equals(opcionTipo)) {
+                lista = movimientoService.listarIngresosPorUsuario(usuario.getId());
+            } else if ("Egresos".equals(opcionTipo)) {
+                lista = movimientoService.listarGastosPorUsuario(usuario.getId());
+            } else {
+                lista = movimientoService.listarPorUsuario(usuario.getId()); // Todos
+            }
+
+            // Filtrado adicional por categoría
+            if (opcionCategoria != null && !"Todas".equals(opcionCategoria)) {
+                lista = lista.stream()
+                        .filter(m -> opcionCategoria.equalsIgnoreCase(m.getCategoria()))
+                        .toList();
+            }
+
+            // Filtro por rango de fechas
+            java.util.Date fechaDesde = jdcFecha1.getDate();
+            java.util.Date fechaHasta = jdcFecha2.getDate();
+
+            if (fechaDesde != null && fechaHasta != null) {
+                lista = lista.stream()
+                        .filter(m -> {
+                            java.util.Date fechaMovimiento = new java.util.Date(m.getFecha().getTime());
+                            return !fechaMovimiento.before(fechaDesde) && !fechaMovimiento.after(fechaHasta);
+                        })
+                        .toList();
+            }
+
+            // Formato de fecha sin segundos
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+            for (Movimiento m : lista) {
+                String fechaFormateada = m.getFecha().toLocalDateTime().format(formatter);
+
+                modelo.addRow(new Object[]{
+                    fechaFormateada,
+                    m.getTipo(),
+                    m.getCategoria(),
+                    m.getDescripcion(),
+                    m.getMonto()
+                });
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "⚠ Error al cargar movimientos: " + ex.getMessage());
         }
-
-        // Filtrado adicional por categoría (si no es "Todas")
-        if (opcionCategoria != null && !"Todas".equals(opcionCategoria)) {
-            lista = lista.stream()
-                         .filter(m -> opcionCategoria.equalsIgnoreCase(m.getCategoria()))
-                         .toList();
-        }
-
-        // Formato de fecha sin segundos
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-        for (Movimiento m : lista) {
-            String fechaFormateada = m.getFecha().toLocalDateTime().format(formatter);
-
-            modelo.addRow(new Object[]{
-                fechaFormateada,
-                m.getTipo(),
-                m.getCategoria(),
-                m.getDescripcion(),
-                m.getMonto()
-            });
-        }
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "⚠ Error al cargar movimientos: " + ex.getMessage());
     }
-}
 
-    
+    private void limpiarFiltros() {
+        // Resetear fechas
+        jdcFecha1.setDate(null);
+        jdcFecha2.setDate(null);
 
+        // Resetear combos
+        cbxTipo.setSelectedItem("Todos");
+        cbxCategoria.setSelectedItem("Todas");
 
+        // Volver a cargar la tabla con todos los movimientos
+        cargarMovimientos();
+    }
 
+    private void cargarCategorias() throws SQLException {
+        CategoriaDaoImpl dao = new CategoriaDaoImpl();
+        List<Categoria> categoriasIngresos = dao.listarPorUsuario(usuario.getId(), "INGRESO");
+        List<Categoria> categoriasGastos = dao.listarPorUsuario(usuario.getId(), "GASTO");
 
-    
- 
-   
+        cbxingrsocategoria.removeAllItems();
+        cbxGastoCategoria.removeAllItems();
 
+        // Llenar combos
+        for (Categoria c : categoriasIngresos) {
+            cbxingrsocategoria.addItem(c);
+        }
+        for (Categoria cg : categoriasGastos) {
+            cbxGastoCategoria.addItem(cg);
+        }
+
+        // Depuración
+        System.out.println("Categorías INGRESO en combo: " + categoriasIngresos.size());
+        for (Categoria c : categoriasIngresos) {
+            System.out.println(" -> " + c.getNombre());
+        }
+
+        System.out.println("Categorías GASTO en combo: " + categoriasGastos.size());
+        for (Categoria cg : categoriasGastos) {
+            System.out.println(" -> " + cg.getNombre());
+        }
+    }
+
+    private void cargarCategoriasFiltro() throws SQLException {
+        CategoriaDaoImpl dao = new CategoriaDaoImpl();
+
+        cbxCategoria.removeAllItems();
+        cbxCategoria.addItem("Todas"); // opción default
+
+        String opcionTipo = (String) cbxTipo.getSelectedItem();
+
+        List<Categoria> categorias;
+
+        if ("Ingresos".equalsIgnoreCase(opcionTipo)) {
+            categorias = dao.listarPorUsuario(usuario.getId(), "INGRESO");
+        } else if ("Egresos".equalsIgnoreCase(opcionTipo)) {
+            categorias = dao.listarPorUsuario(usuario.getId(), "GASTO");
+        } else {
+            categorias = new ArrayList<>();
+        }
+
+        for (Categoria c : categorias) {
+            cbxCategoria.addItem(c.getNombre());
+        }
+
+    }
 
     /**/
     /**
@@ -1530,8 +1512,6 @@ public class JframeInicio extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox4;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
     private com.toedter.calendar.JDateChooser jDateChooser3;
     private com.toedter.calendar.JDateChooser jDateChooser4;
     private com.toedter.calendar.JDateChooser jDateChooser5;
@@ -1570,6 +1550,8 @@ public class JframeInicio extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
+    private com.toedter.calendar.JDateChooser jdcFecha1;
+    private com.toedter.calendar.JDateChooser jdcFecha2;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JTable tblGastos;
     private javax.swing.JTable tblIngreso;
