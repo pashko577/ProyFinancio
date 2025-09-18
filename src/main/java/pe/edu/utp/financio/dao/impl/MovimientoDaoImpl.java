@@ -25,7 +25,12 @@ public class MovimientoDaoImpl implements MovimientoDAO {
 
     @Override
     public List<Movimiento> listarPorUsuario(int idUsuario) throws SQLException {
-       String sql = "SELECT * FROM movimientos WHERE id_usuario = ? ORDER BY id_movimiento ASC";
+       String sql = "SELECT m.id_movimiento, m.id_usuario, m.id_categoria, " +
+                 "m.monto, m.categoria, m.descripcion, m.fecha, c.tipo " +
+                 "FROM movimientos m " +
+                 "JOIN categorias c ON m.id_categoria = c.id_categoria " +
+                 "WHERE m.id_usuario = ? " +
+                 "ORDER BY m.id_movimiento ASC";
         List<Movimiento> lista = new ArrayList<>();
 
         try (Connection conn = ConexionPostgres.getConnection();
@@ -42,7 +47,8 @@ public class MovimientoDaoImpl implements MovimientoDAO {
                         rs.getBigDecimal("monto"),
                         rs.getString("categoria"),
                         rs.getString("descripcion"),
-                        rs.getTimestamp("fecha")
+                        rs.getTimestamp("fecha"),
+                        rs.getString("tipo")
                 );
                 lista.add(m);
             }
@@ -90,7 +96,8 @@ public class MovimientoDaoImpl implements MovimientoDAO {
     public List<Movimiento> listarIngresosPorUsuario(int idUsuario) throws SQLException {
  String sql = """
         SELECT m.id_movimiento, m.id_usuario, m.id_categoria, m.monto,
-               c.nombre AS categoria, m.descripcion, m.fecha
+               c.nombre AS categoria, m.descripcion, m.fecha,
+               c.tipo AS tipo
         FROM movimientos m
         JOIN categorias c ON m.id_categoria = c.id_categoria
         WHERE m.id_usuario = ? AND c.tipo = 'INGRESO'
@@ -105,7 +112,8 @@ public class MovimientoDaoImpl implements MovimientoDAO {
     public List<Movimiento> listarGastosPorUsuario(int idUsuario) throws SQLException {
 String sql = """
         SELECT m.id_movimiento, m.id_usuario, m.id_categoria, m.monto,
-               c.nombre AS categoria, m.descripcion, m.fecha
+               c.nombre AS categoria, m.descripcion, m.fecha,
+             c.tipo AS tipo
         FROM movimientos m
         JOIN categorias c ON m.id_categoria = c.id_categoria
         WHERE m.id_usuario = ? AND c.tipo = 'GASTO'
@@ -132,7 +140,8 @@ String sql = """
                 rs.getBigDecimal("monto"),
                 rs.getString("categoria"),
                 rs.getString("descripcion"),
-                rs.getTimestamp("fecha")
+                rs.getTimestamp("fecha"),
+                rs.getString("tipo")
             );
             lista.add(m);
         }

@@ -19,13 +19,13 @@ public class Movimiento {
     private BigDecimal monto;
     private String categoria;
     private String descripcion;
-    private Timestamp fecha;
+    private Timestamp fecha;    
+    private String tipo;
 
     public Movimiento() {
     }
 
-    
-    public Movimiento(int id, int idUsuario, int idCategoria, BigDecimal monto, String categoria, String descripcion, Timestamp fecha) {
+    public Movimiento(int id, int idUsuario, int idCategoria, BigDecimal monto, String categoria, String descripcion, Timestamp fecha, String tipo) {
         this.id = id;
         this.idUsuario = idUsuario;
         this.idCategoria = idCategoria;
@@ -33,9 +33,8 @@ public class Movimiento {
         this.categoria = categoria;
         this.descripcion = descripcion;
         this.fecha = fecha;
+        this.tipo = tipo;
     }
-
-
 
     public int getId() {
         return id;
@@ -93,5 +92,16 @@ public class Movimiento {
         this.fecha = fecha;
     }
 
-  
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 }
+    
+
+
+
+
