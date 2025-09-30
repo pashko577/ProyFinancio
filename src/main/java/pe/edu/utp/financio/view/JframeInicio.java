@@ -223,6 +223,18 @@ public class JframeInicio extends javax.swing.JFrame {
         jLabel28 = new javax.swing.JLabel();
         btncomenzar = new javax.swing.JButton();
         PanelCajachica = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel31 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        jLabel33 = new javax.swing.JLabel();
+        txtfondo = new javax.swing.JTextField();
+        txtcierre = new javax.swing.JTextField();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        btnagregar = new javax.swing.JButton();
+        btneliminar = new javax.swing.JButton();
+        jLabel34 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -973,15 +985,124 @@ public class JframeInicio extends javax.swing.JFrame {
 
         JPpanelcontenido.add(Panelnicio, "card2");
 
+        jPanel2.setBackground(new java.awt.Color(255, 204, 204));
+
+        jLabel31.setFont(new java.awt.Font("Segoe UI Black", 0, 36)); // NOI18N
+        jLabel31.setText("Caja Registradora");
+
+        jLabel30.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
+        jLabel30.setText("Fondo (Mañana): ");
+
+        jLabel32.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
+        jLabel32.setText("Resumen del dia:");
+
+        jLabel33.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
+        jLabel33.setText("Cierre (Noche):");
+
+        txtfondo.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
+        txtfondo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtfondo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtfondoActionPerformed(evt);
+            }
+        });
+
+        txtcierre.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
+        txtcierre.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtcierre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtcierreActionPerformed(evt);
+            }
+        });
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Sitka Text", 1, 14)); // NOI18N
+        jTextArea1.setRows(5);
+        jTextArea1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jScrollPane5.setViewportView(jTextArea1);
+
+        btnagregar.setBackground(new java.awt.Color(204, 204, 204));
+        btnagregar.setFont(new java.awt.Font("Sitka Text", 1, 24)); // NOI18N
+        btnagregar.setText("AGREGAR");
+
+        btneliminar.setBackground(new java.awt.Color(204, 204, 204));
+        btneliminar.setFont(new java.awt.Font("Sitka Text", 1, 24)); // NOI18N
+        btneliminar.setText("ELIMINAR");
+
+        jLabel34.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pe/edu/utp/financio/images/caja.png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(145, 145, 145)
+                .addComponent(jLabel31)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(55, 55, 55)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtfondo, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel30))
+                        .addGap(77, 77, 77)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(txtcierre, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(67, 67, 67)
+                                .addComponent(btnagregar, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(86, 86, 86)
+                                .addComponent(btneliminar))
+                            .addComponent(jLabel33))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel32)
+                        .addContainerGap(981, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 536, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(87, 87, 87))))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel31)
+                .addGap(54, 54, 54)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel30)
+                    .addComponent(jLabel33))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtfondo, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtcierre, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnagregar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btneliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel32)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(46, 46, 46))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel34, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(19, 19, 19))))
+        );
+
         javax.swing.GroupLayout PanelCajachicaLayout = new javax.swing.GroupLayout(PanelCajachica);
         PanelCajachica.setLayout(PanelCajachicaLayout);
         PanelCajachicaLayout.setHorizontalGroup(
             PanelCajachicaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1000, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         PanelCajachicaLayout.setVerticalGroup(
             PanelCajachicaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 716, Short.MAX_VALUE)
+            .addGroup(PanelCajachicaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         JPpanelcontenido.add(PanelCajachica, "card9");
@@ -1354,6 +1475,14 @@ public class JframeInicio extends javax.swing.JFrame {
     private void cbxTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxTipoActionPerformed
 
     }//GEN-LAST:event_cbxTipoActionPerformed
+
+    private void txtfondoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtfondoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtfondoActionPerformed
+
+    private void txtcierreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcierreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtcierreActionPerformed
 
     private void cargarMetodosPagoPorDefecto(JComboBox<Metodopago> combo, String[] opciones) {
         try {
@@ -1767,7 +1896,9 @@ public class JframeInicio extends javax.swing.JFrame {
     private javax.swing.JButton btnMeta;
     public javax.swing.JButton btnMetas;
     public javax.swing.JButton btnMovimiento;
+    private javax.swing.JButton btnagregar;
     private javax.swing.JButton btncomenzar;
+    private javax.swing.JButton btneliminar;
     private javax.swing.JButton btningresoguardar;
     private javax.swing.JComboBox<String> cbxCategoria;
     private javax.swing.JComboBox<Categoria> cbxGastoCategoria;
@@ -1805,6 +1936,11 @@ public class JframeInicio extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1812,11 +1948,14 @@ public class JframeInicio extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JTextArea jTextArea1;
     private com.toedter.calendar.JDateChooser jdcFecha1;
     private com.toedter.calendar.JDateChooser jdcFecha2;
     private com.toedter.calendar.JDateChooser jdcFechaMeta;
@@ -1832,6 +1971,8 @@ public class JframeInicio extends javax.swing.JFrame {
     private javax.swing.JTextField txtObjetivoMeta;
     private javax.swing.JTextField txtPorcentajedestinadoMeta;
     private javax.swing.JTextField txtTotal;
+    private javax.swing.JTextField txtcierre;
+    private javax.swing.JTextField txtfondo;
     private javax.swing.JTextField txtingresocantidad;
     private javax.swing.JTextField txtingresodescripcion;
     // End of variables declaration//GEN-END:variables
