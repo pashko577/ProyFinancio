@@ -1029,7 +1029,7 @@ public class JframeInicio extends javax.swing.JFrame {
         btneliminar.setFont(new java.awt.Font("Sitka Text", 1, 24)); // NOI18N
         btneliminar.setText("ELIMINAR");
 
-        jLabel34.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pe/edu/utp/financio/images/caja.png"))); // NOI18N
+        
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
