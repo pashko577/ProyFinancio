@@ -1503,7 +1503,7 @@ public class JframeInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_txtcierreActionPerformed
 
     private void btncerrarsesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncerrarsesionActionPerformed
-        cerrarSesion();
+        cerrarSesion();   
     }//GEN-LAST:event_btncerrarsesionActionPerformed
 
     private void cargarMetodosPagoPorDefecto(JComboBox<Metodopago> combo, String[] opciones) {
