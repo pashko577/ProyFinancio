@@ -27,6 +27,7 @@ import pe.edu.utp.financio.dao.impl.CategoriaDaoImpl;
 import pe.edu.utp.financio.dao.impl.MetaDAOMongo;
 import pe.edu.utp.financio.dao.impl.MetodoPagoDaoImpl;
 import pe.edu.utp.financio.dao.impl.MovimientoDaoImpl;
+import pe.edu.utp.financio.dao.impl.UsuarioDAOPostgres;
 import pe.edu.utp.financio.modelo.Categoria;
 import pe.edu.utp.financio.modelo.Meta;
 import pe.edu.utp.financio.modelo.Metodopago;
@@ -1252,8 +1253,11 @@ public class JframeInicio extends javax.swing.JFrame {
             m.setDescripcion(descripcion);
             m.setIdMetodoPago(metodoPagoSeleccionado.getId());
 
+            UsuarioDAOPostgres daousuario= new UsuarioDAOPostgres();
+            int idAdmin= daousuario.obtenerIdAdmin();
+            int creadoPor= usuario.getId();
             MovimientoDaoImpl daoMov = new MovimientoDaoImpl();
-            int idGenerado = daoMov.registrarmovimiento(m);
+            int idGenerado= daoMov.registrarmovimiento(m, idAdmin, creadoPor);
 
             if (idGenerado > 0) {
                 JOptionPane.showMessageDialog(this, "✅ Ingreso registrado con ID: " + idGenerado);
@@ -1446,8 +1450,11 @@ public class JframeInicio extends javax.swing.JFrame {
             m.setDescripcion(descripcion);
             m.setIdMetodoPago(metodoPagoSeleccionado.getId());
 
+            UsuarioDAOPostgres daousuario= new UsuarioDAOPostgres();
+            int idAdmin= daousuario.obtenerIdAdmin();
+            int creadoPor= usuario.getId();
             MovimientoDaoImpl daoMov = new MovimientoDaoImpl();
-            int idGenerado = daoMov.registrarmovimiento(m);
+            int idGenerado= daoMov.registrarmovimiento(m, idAdmin, creadoPor);
 
             if (idGenerado > 0) {
                 JOptionPane.showMessageDialog(this, "✅ Ingreso registrado con ID: " + idGenerado);
@@ -1581,7 +1588,7 @@ public class JframeInicio extends javax.swing.JFrame {
             modelo.setRowCount(0); //limpiar filas previas
 
             //obtener lista desde la BD
-            List<Movimiento> lista = daoMov.listarIngresosPorUsuario(usuario.getId());
+            List<Movimiento> lista = movimientoService.listarIngresosPorUsuario(usuario);
 
             // acumulador del total
             BigDecimal total = BigDecimal.ZERO;
@@ -1617,8 +1624,7 @@ public class JframeInicio extends javax.swing.JFrame {
             modelo.setRowCount(0); //limpiar filas previas
 
             //obtener lista desde la BD
-            List<Movimiento> lista = daoMov.listarGastosPorUsuario(usuario.getId());
-
+            List<Movimiento> lista = movimientoService.listarGastosPorUsuario(usuario);
             //acumulador del total 
             BigDecimal total = BigDecimal.ZERO;
 
@@ -1657,11 +1663,11 @@ public class JframeInicio extends javax.swing.JFrame {
 
             // Filtrado por tipo
             if ("Ingresos".equals(opcionTipo)) {
-                lista = movimientoService.listarIngresosPorUsuario(usuario.getId());
+                lista = movimientoService.listarIngresosPorUsuario(usuario);
             } else if ("Egresos".equals(opcionTipo)) {
-                lista = movimientoService.listarGastosPorUsuario(usuario.getId());
+                lista = movimientoService.listarGastosPorUsuario(usuario);
             } else {
-                lista = movimientoService.listarPorUsuario(usuario.getId()); // Todos
+                lista = movimientoService.listarPorUsuario(usuario); // Todos
             }
 
             // Filtrado adicional por categoría

@@ -24,6 +24,8 @@ public class Movimiento {
     private Timestamp fecha;
     private String tipo;
     private String nombreMetodoPago;
+    private int creadoPor;
+    private String nombreCreador;
 
 
     public Movimiento() {
@@ -44,6 +46,23 @@ public class Movimiento {
         this.nombreMetodoPago=nombreMetodoPago;
    
     }
+
+    public Movimiento(int id, int idUsuario, int idCategoria, int idMetodoPago, BigDecimal monto, String categoria, String descripcion, Timestamp fecha, String tipo, String nombreMetodoPago, int creadoPor, String nombreCreador) {
+        this.id = id;
+        this.idUsuario = idUsuario;
+        this.idCategoria = idCategoria;
+        this.idMetodoPago = idMetodoPago;
+        this.monto = monto;
+        this.categoria = categoria;
+        this.descripcion = descripcion;
+        this.fecha = fecha;
+        this.tipo = tipo;
+        this.nombreMetodoPago = nombreMetodoPago;
+        this.creadoPor = creadoPor;
+        this.nombreCreador = nombreCreador;
+    }
+    
+    
 
     public int getId() {
         return id;
@@ -123,6 +142,27 @@ public class Movimiento {
 
     public void setNombreMetodoPago(String nombreMetodoPago) {
         this.nombreMetodoPago = nombreMetodoPago;
+    }
+
+    public int getCreadoPor() {
+        return creadoPor;
+    }
+
+    public void setCreadoPor(int creadoPor) {
+        this.creadoPor = creadoPor;
+    }
+
+    public String getNombreCreador() {
+        return nombreCreador;
+    }
+
+    public void setNombreCreador(String nombreCreador) {
+        this.nombreCreador = nombreCreador;
+    }
+
+    @Override
+    public String toString() {
+        return "Movimiento{" + "id=" + id + ", idUsuario=" + idUsuario + ", idCategoria=" + idCategoria + ", idMetodoPago=" + idMetodoPago + ", monto=" + monto + ", categoria=" + categoria + ", descripcion=" + descripcion + ", fecha=" + fecha + ", tipo=" + tipo + ", nombreMetodoPago=" + nombreMetodoPago + ", creadoPor=" + creadoPor + ", nombreCreador=" + nombreCreador + '}';
     }
 
 

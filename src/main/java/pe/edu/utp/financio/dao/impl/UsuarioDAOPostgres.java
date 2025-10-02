@@ -72,4 +72,19 @@ public class UsuarioDAOPostgres implements UsuarioDAO {
         }
         return null;
     }
+    
+    public int obtenerIdAdmin() throws SQLException {
+    String sql = "SELECT id_usuario FROM usuarios WHERE rol = 'ADMIN' LIMIT 1";
+    try (Connection conn = ConexionPostgres.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("id_usuario");
+        } else {
+            throw new SQLException("No se encontró un usuario admin en la BD");
+        }
+    }
+}
+
 }
