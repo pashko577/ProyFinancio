@@ -33,10 +33,19 @@ public class RegistrarUsuariosPruebas {
 //            null                       // fecha_reg (lo genera la BD)
 //        );
         Usuario empleado = new Usuario(
-            0,                         // id_usuario (se autogenera)
-            "Jose",           // nombre
-            "46319763",                // dni
-            "jose@financio.com",      // correo
+//            0,                         // id_usuario (se autogenera)
+//            "Jose",           // nombre
+//            "46319763",                // dni
+//            "jose@financio.com",      // correo
+//            "990222176",               // teléfono
+//            "empleado123",                //contraseña en plano (será encriptada en registrar)
+//            "EMPLEADO",                // ROL
+//            null                       // fecha_reg (lo genera la BD)
+            
+           0,                         // id_usuario (se autogenera)
+            "Maria",           // nombre
+            "02441166",                // dni
+            "maria@financio.com",      // correo
             "990222176",               // teléfono
             "empleado123",                //contraseña en plano (será encriptada en registrar)
             "EMPLEADO",                // ROL
