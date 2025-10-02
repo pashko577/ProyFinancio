@@ -319,37 +319,47 @@ public class JframeInicio extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 36)); // NOI18N
         jLabel1.setText("Nuevo Ingreso");
 
+        jLabel2.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
         jLabel2.setText("Monto:");
 
+        txtingresocantidad.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtingresocantidad.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txtingresocantidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtingresocantidadActionPerformed(evt);
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
         jLabel4.setText("Categoria:");
 
+        jLabel5.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
         jLabel5.setText("Descripción:");
 
+        txtingresodescripcion.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         txtingresodescripcion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtingresodescripcionActionPerformed(evt);
             }
         });
 
+        cbxingrsocategoria.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         cbxingrsocategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbxingrsocategoriaActionPerformed(evt);
             }
         });
 
+        btningresoguardar.setFont(new java.awt.Font("Sitka Text", 1, 12)); // NOI18N
         btningresoguardar.setText("Guardar");
+        btningresoguardar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btningresoguardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btningresoguardarActionPerformed(evt);
             }
         });
 
+        tblIngreso.setFont(new java.awt.Font("Sitka Text", 1, 12)); // NOI18N
         tblIngreso.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -363,22 +373,32 @@ public class JframeInicio extends javax.swing.JFrame {
         ));
         jScrollPane3.setViewportView(tblIngreso);
 
+        btnAgregar.setFont(new java.awt.Font("Sitka Text", 1, 12)); // NOI18N
         btnAgregar.setText("Agregar Categoria");
+        btnAgregar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarActionPerformed(evt);
             }
         });
 
+        btnEliminar.setFont(new java.awt.Font("Sitka Text", 1, 12)); // NOI18N
         btnEliminar.setText("Eliminar");
+        btnEliminar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarActionPerformed(evt);
             }
         });
 
+        cbxMetodoPagoIngreso.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel3.setFont(new java.awt.Font("Sitka Text", 1, 12)); // NOI18N
         jLabel3.setText("Total:");
 
+        txtTotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel8.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
         jLabel8.setText("Método de pago:");
 
         javax.swing.GroupLayout PanelIngresoLayout = new javax.swing.GroupLayout(PanelIngreso);
@@ -391,24 +411,23 @@ public class JframeInicio extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(PanelIngresoLayout.createSequentialGroup()
                 .addGap(72, 72, 72)
-                .addComponent(btnAgregar)
-                .addGap(57, 57, 57)
+                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
                 .addComponent(btningresoguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(56, 56, 56)
                 .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(PanelIngresoLayout.createSequentialGroup()
                 .addGap(60, 60, 60)
-                .addGroup(PanelIngresoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtingresocantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(PanelIngresoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel2)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtingresodescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
-                        .addComponent(cbxMetodoPagoIngreso, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cbxingrsocategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(PanelIngresoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel2)
+                    .addComponent(txtingresodescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
+                    .addComponent(cbxMetodoPagoIngreso, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cbxingrsocategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtingresocantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
                 .addGroup(PanelIngresoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelIngresoLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -455,7 +474,7 @@ public class JframeInicio extends javax.swing.JFrame {
                     .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btningresoguardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(121, Short.MAX_VALUE))
+                .addContainerGap(138, Short.MAX_VALUE))
         );
 
         JPpanelcontenido.add(PanelIngreso, "card3");
@@ -465,13 +484,24 @@ public class JframeInicio extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI Black", 0, 36)); // NOI18N
         jLabel6.setText("Nuevo Gasto");
 
+        jLabel7.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
         jLabel7.setText("Monto:");
 
+        txtGastoMonto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel9.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
         jLabel9.setText("Categoria:");
 
+        jLabel10.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
         jLabel10.setText("Descripción:");
 
+        txtGastoDescripcion.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        cbxGastoCategoria.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        btnGastoGuardar.setFont(new java.awt.Font("Sitka Text", 1, 12)); // NOI18N
         btnGastoGuardar.setText("Guardar");
+        btnGastoGuardar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnGastoGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGastoGuardarActionPerformed(evt);
@@ -491,23 +521,33 @@ public class JframeInicio extends javax.swing.JFrame {
         ));
         jScrollPane4.setViewportView(tblGastos);
 
+        btnGastoAgrCategoria.setFont(new java.awt.Font("Sitka Text", 1, 12)); // NOI18N
         btnGastoAgrCategoria.setText("Agregar Categoria");
+        btnGastoAgrCategoria.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnGastoAgrCategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGastoAgrCategoriaActionPerformed(evt);
             }
         });
 
+        btnGastoEliminar.setFont(new java.awt.Font("Sitka Text", 1, 12)); // NOI18N
         btnGastoEliminar.setText("Eliminar");
+        btnGastoEliminar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         btnGastoEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGastoEliminarActionPerformed(evt);
             }
         });
 
+        jLabel26.setFont(new java.awt.Font("Sitka Text", 1, 12)); // NOI18N
         jLabel26.setText("Total:");
 
+        txtGastoTotal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel29.setFont(new java.awt.Font("Sitka Text", 1, 18)); // NOI18N
         jLabel29.setText("Método de pago:");
+
+        cbxMetodoPagoGasto.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout PanelGastosLayout = new javax.swing.GroupLayout(PanelGastos);
         PanelGastos.setLayout(PanelGastosLayout);
@@ -526,36 +566,35 @@ public class JframeInicio extends javax.swing.JFrame {
                                 .addComponent(btnGastoGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(40, 40, 40)
                                 .addComponent(btnGastoEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(585, Short.MAX_VALUE))
+                        .addContainerGap(607, Short.MAX_VALUE))
                     .addGroup(PanelGastosLayout.createSequentialGroup()
                         .addGroup(PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtGastoDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtGastoMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(cbxMetodoPagoGasto, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(cbxGastoCategoria, javax.swing.GroupLayout.Alignment.LEADING, 0, 202, Short.MAX_VALUE))
-                            .addComponent(jLabel7))
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel29)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel10))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 556, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelGastosLayout.createSequentialGroup()
-                                .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtGastoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(47, 47, 47)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addComponent(txtGastoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(173, 173, 173))))
         );
         PanelGastosLayout.setVerticalGroup(
             PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelGastosLayout.createSequentialGroup()
-                .addGap(72, 72, 72)
-                .addComponent(jLabel6)
-                .addGap(29, 29, 29)
                 .addGroup(PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelGastosLayout.createSequentialGroup()
+                        .addGap(72, 72, 72)
+                        .addComponent(jLabel6)
+                        .addGap(29, 29, 29)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtGastoMonto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -577,13 +616,13 @@ public class JframeInicio extends javax.swing.JFrame {
                             .addComponent(btnGastoGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnGastoEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(PanelGastosLayout.createSequentialGroup()
-                        .addGap(9, 9, 9)
+                        .addGap(163, 163, 163)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36)
+                        .addGap(18, 18, 18)
                         .addGroup(PanelGastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel26)
                             .addComponent(txtGastoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(166, Short.MAX_VALUE))
+                .addContainerGap(165, Short.MAX_VALUE))
         );
 
         JPpanelcontenido.add(PanelGastos, "card4");
@@ -1044,6 +1083,11 @@ public class JframeInicio extends javax.swing.JFrame {
         btnagregar.setBackground(new java.awt.Color(204, 204, 204));
         btnagregar.setFont(new java.awt.Font("Sitka Text", 1, 24)); // NOI18N
         btnagregar.setText("AGREGAR");
+        btnagregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnagregarActionPerformed(evt);
+            }
+        });
 
         btneliminar.setBackground(new java.awt.Color(204, 204, 204));
         btneliminar.setFont(new java.awt.Font("Sitka Text", 1, 24)); // NOI18N
@@ -1578,6 +1622,10 @@ public class JframeInicio extends javax.swing.JFrame {
     private void btncerrarsesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncerrarsesionActionPerformed
         cerrarSesion();   
     }//GEN-LAST:event_btncerrarsesionActionPerformed
+
+    private void btnagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnagregarActionPerformed
 
     private void cargarMetodosPagoPorDefecto(JComboBox<Metodopago> combo, String[] opciones) {
         try {
