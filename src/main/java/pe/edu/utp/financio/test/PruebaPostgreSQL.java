@@ -19,9 +19,9 @@ public class PruebaPostgreSQL {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-          String url = "jdbc:postgresql://localhost:5432/financio";
+        String url = "jdbc:postgresql://localhost:5432/financio";
         String user = "postgres";
-        String pass = "root";
+        String pass = "Castro";
 
         try (Connection cn = DriverManager.getConnection(url, user, pass)) {
             System.out.println("✅ Conectado a PostgreSQL");
@@ -35,5 +35,5 @@ public class PruebaPostgreSQL {
             System.out.println("❌ Error: " + e.getMessage());
         }
     }
-    
+
 }
