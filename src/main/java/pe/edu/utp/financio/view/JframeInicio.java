@@ -849,39 +849,36 @@ public class JframeInicio extends javax.swing.JFrame {
                     .addGroup(PanelMetasLayout.createSequentialGroup()
                         .addGap(17, 17, 17)
                         .addGroup(PanelMetasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(PanelMetasLayout.createSequentialGroup()
-                                .addGroup(PanelMetasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(PanelMetasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(PanelMetasLayout.createSequentialGroup()
-                                            .addGap(6, 6, 6)
-                                            .addComponent(jLabel18)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtNombreMeta, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(PanelMetasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addGroup(PanelMetasLayout.createSequentialGroup()
-                                            .addComponent(jLabel20)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(jdcFechaMeta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addGroup(PanelMetasLayout.createSequentialGroup()
-                                            .addComponent(jLabel19)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(txtObjetivoMeta, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(42, 42, 42)
-                                .addGroup(PanelMetasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnMeta)
-                                    .addComponent(jButton8))
-                                .addGap(249, 249, 249))))
+                            .addGroup(PanelMetasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(PanelMetasLayout.createSequentialGroup()
+                                    .addGap(6, 6, 6)
+                                    .addComponent(jLabel18)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtNombreMeta, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(PanelMetasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(PanelMetasLayout.createSequentialGroup()
+                                    .addComponent(jLabel20)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jdcFechaMeta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGroup(PanelMetasLayout.createSequentialGroup()
+                                    .addComponent(jLabel19)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtObjetivoMeta, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(42, 42, 42)
+                        .addGroup(PanelMetasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnMeta)
+                            .addComponent(jButton8)))
                     .addGroup(PanelMetasLayout.createSequentialGroup()
                         .addGap(21, 21, 21)
                         .addGroup(PanelMetasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(PanelMetasLayout.createSequentialGroup()
                                 .addComponent(jLabel21)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtPorcentajedestinadoMeta, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(602, Short.MAX_VALUE))
+                .addContainerGap(607, Short.MAX_VALUE))
         );
         PanelMetasLayout.setVerticalGroup(
             PanelMetasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -906,7 +903,7 @@ public class JframeInicio extends javax.swing.JFrame {
                 .addGroup(PanelMetasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtPorcentajedestinadoMeta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel21))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1306,6 +1303,11 @@ public class JframeInicio extends javax.swing.JFrame {
             MetaDAOMongo daoMeta = new MetaDAOMongo();
             daoMeta.registrar(meta);
 
+            JProgressBar barra = new JProgressBar(0, 100);
+            barra.setValue(0);
+            barra.setString("0%");
+            barra.setStringPainted(true);
+
             JOptionPane.showMessageDialog(this, "✅ Meta registrada correctamente.");
 
             // Recargar tabla
@@ -1379,11 +1381,11 @@ public class JframeInicio extends javax.swing.JFrame {
             m.setDescripcion(descripcion);
             m.setIdMetodoPago(metodoPagoSeleccionado.getId());
 
-            UsuarioDAOPostgres daousuario= new UsuarioDAOPostgres();
-            int idAdmin= daousuario.obtenerIdAdmin();
-            int creadoPor= usuario.getId();
+            UsuarioDAOPostgres daousuario = new UsuarioDAOPostgres();
+            int idAdmin = daousuario.obtenerIdAdmin();
+            int creadoPor = usuario.getId();
             MovimientoDaoImpl daoMov = new MovimientoDaoImpl();
-            int idGenerado= daoMov.registrarmovimiento(m, idAdmin, creadoPor);
+            int idGenerado = daoMov.registrarmovimiento(m, idAdmin, creadoPor);
 
             if (idGenerado > 0) {
                 JOptionPane.showMessageDialog(this, "✅ Ingreso registrado con ID: " + idGenerado);
@@ -1576,11 +1578,11 @@ public class JframeInicio extends javax.swing.JFrame {
             m.setDescripcion(descripcion);
             m.setIdMetodoPago(metodoPagoSeleccionado.getId());
 
-            UsuarioDAOPostgres daousuario= new UsuarioDAOPostgres();
-            int idAdmin= daousuario.obtenerIdAdmin();
-            int creadoPor= usuario.getId();
+            UsuarioDAOPostgres daousuario = new UsuarioDAOPostgres();
+            int idAdmin = daousuario.obtenerIdAdmin();
+            int creadoPor = usuario.getId();
             MovimientoDaoImpl daoMov = new MovimientoDaoImpl();
-            int idGenerado= daoMov.registrarmovimiento(m, idAdmin, creadoPor);
+            int idGenerado = daoMov.registrarmovimiento(m, idAdmin, creadoPor);
 
             if (idGenerado > 0) {
                 JOptionPane.showMessageDialog(this, "✅ Ingreso registrado con ID: " + idGenerado);
@@ -1620,7 +1622,7 @@ public class JframeInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_txtcierreActionPerformed
 
     private void btncerrarsesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncerrarsesionActionPerformed
-        cerrarSesion();   
+        cerrarSesion();
     }//GEN-LAST:event_btncerrarsesionActionPerformed
 
     private void btnagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarActionPerformed
@@ -1948,20 +1950,31 @@ public class JframeInicio extends javax.swing.JFrame {
     }
 
     public void inicializarTablaMetas() {
-        // Configurar columnas
-        DefaultTableModel modelo = new DefaultTableModel();
+        DefaultTableModel modelo = new DefaultTableModel() {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return columnIndex == 3 ? JProgressBar.class : Object.class;
+            }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+
+        };
         modelo.setColumnIdentifiers(new Object[]{"Nombre", "Objetivo", "Acumulado", "Progreso"});
         tblMetas.setModel(modelo);
 
-        // Configurar renderer para la columna de progreso
         tblMetas.setDefaultRenderer(JProgressBar.class, new TableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
-                    boolean isSelected, boolean hasFocus,
-                    int row, int column) {
-                return (JProgressBar) value;
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+                JProgressBar barra = (JProgressBar) value;
+                barra.setStringPainted(true);
+                return barra;
             }
         });
+
     }
 
     public void actualizarProgresoMeta(int idMeta, double nuevoAcumulado, double montoObjetivo) {
@@ -1974,26 +1987,27 @@ public class JframeInicio extends javax.swing.JFrame {
             barra.setString(progreso + "%");
         }
     }
+
     private void cerrarSesion() {
-    int confirm = JOptionPane.showConfirmDialog(
-        this,
-        "¿Seguro que deseas cerrar sesión?",
-        "Cerrar Sesión",
-        JOptionPane.YES_NO_OPTION
-    );
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "¿Seguro que deseas cerrar sesión?",
+                "Cerrar Sesión",
+                JOptionPane.YES_NO_OPTION
+        );
 
-    if (confirm == JOptionPane.YES_OPTION) {
-        // Limpiar usuario actual
-        usuario = null;
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Limpiar usuario actual
+            usuario = null;
 
-        // Cerrar la ventana actual
-        this.dispose();
+            // Cerrar la ventana actual
+            this.dispose();
 
-        // Volver a la ventana de login
-        JframeLogin login = new JframeLogin(); // tu JFrame de login
-        login.setVisible(true);
+            // Volver a la ventana de login
+            JframeLogin login = new JframeLogin(); // tu JFrame de login
+            login.setVisible(true);
+        }
     }
-}
 
     //combo box pago
     /**/
