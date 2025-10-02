@@ -141,6 +141,7 @@ public class JframeInicio extends javax.swing.JFrame {
         btnAnalisisFinanzas = new javax.swing.JButton();
         btnMetas = new javax.swing.JButton();
         btnExportarDatos = new javax.swing.JButton();
+        btncerrarsesion = new javax.swing.JButton();
         JPpanelcontenido = new javax.swing.JPanel();
         PanelIngreso = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -294,6 +295,14 @@ public class JframeInicio extends javax.swing.JFrame {
             }
         });
         JPpanelMenu.add(btnExportarDatos);
+
+        btncerrarsesion.setText("Cerrar Sesion");
+        btncerrarsesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncerrarsesionActionPerformed(evt);
+            }
+        });
+        JPpanelMenu.add(btncerrarsesion);
 
         JPpanelcontenido.setLayout(new java.awt.CardLayout());
 
@@ -1493,6 +1502,10 @@ public class JframeInicio extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtcierreActionPerformed
 
+    private void btncerrarsesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncerrarsesionActionPerformed
+        cerrarSesion();
+    }//GEN-LAST:event_btncerrarsesionActionPerformed
+
     private void cargarMetodosPagoPorDefecto(JComboBox<Metodopago> combo, String[] opciones) {
         try {
             MetodoPagoDaoImpl dao = new MetodoPagoDaoImpl();
@@ -1840,6 +1853,26 @@ public class JframeInicio extends javax.swing.JFrame {
             barra.setString(progreso + "%");
         }
     }
+    private void cerrarSesion() {
+    int confirm = JOptionPane.showConfirmDialog(
+        this,
+        "¿Seguro que deseas cerrar sesión?",
+        "Cerrar Sesión",
+        JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirm == JOptionPane.YES_OPTION) {
+        // Limpiar usuario actual
+        usuario = null;
+
+        // Cerrar la ventana actual
+        this.dispose();
+
+        // Volver a la ventana de login
+        JframeLogin login = new JframeLogin(); // tu JFrame de login
+        login.setVisible(true);
+    }
+}
 
     //combo box pago
     /**/
@@ -1905,6 +1938,7 @@ public class JframeInicio extends javax.swing.JFrame {
     public javax.swing.JButton btnMetas;
     public javax.swing.JButton btnMovimiento;
     private javax.swing.JButton btnagregar;
+    private javax.swing.JButton btncerrarsesion;
     private javax.swing.JButton btncomenzar;
     private javax.swing.JButton btneliminar;
     private javax.swing.JButton btningresoguardar;
