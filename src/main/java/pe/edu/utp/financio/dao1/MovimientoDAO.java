@@ -16,7 +16,8 @@ public interface MovimientoDAO {
     int registrarmovimiento(Movimiento m) throws SQLException;
     List<Movimiento> listarIngresosPorUsuario(int idUsuario) throws SQLException;
     List<Movimiento> listarGastosPorUsuario(int idUsuario) throws SQLException;
-    List<Movimiento> obtenerMovimientos(int idUsuario, String sql) throws SQLException;
+    
+    int eliminarMovimiento(int idUsuario) throws Exception;
     List<Movimiento> listarPorUsuario(int idUsuario) throws SQLException;
     
 }

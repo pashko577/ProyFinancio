@@ -3,6 +3,7 @@ package pe.edu.utp.financio.view;
 import javax.swing.JOptionPane;
 import pe.edu.utp.financio.dao.impl.UsuarioDAOPostgres;
 import pe.edu.utp.financio.modelo.Usuario;
+import pe.edu.utp.financio.util.Autenticacion;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -161,44 +162,49 @@ public class JframeLogin extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtContraActionPerformed
 
-    public void Ingresar() {
-        String dni = txtUsuario.getText().trim();
-        String password = new String(txtContra.getPassword()).trim();
+ public void Ingresar() {
+    String dni = txtUsuario.getText().trim();
+    String password = new String(txtContra.getPassword()).trim();
 
-        // 🔎 Validar campos vacíos
-        if (dni.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "⚠️ Ingrese DNI y contraseña");
-            return;
-        }
-
-        UsuarioDAOPostgres dao = new UsuarioDAOPostgres();
-        try {
-            Usuario usuario = dao.login(dni, password);
-
-            if (usuario != null) {
-                JOptionPane.showMessageDialog(this,
-                        "Bienvenido " + usuario.getNombre() + " (" + usuario.getRol() + ")");
-               JframeInicio frameInicio = new JframeInicio(usuario);
-
-
-                if ("ADMIN".equalsIgnoreCase(usuario.getRol())) {
-                    // 🔓 Admin tiene acceso a todo → no hacer nada
-                } else if ("EMPLEADO".equalsIgnoreCase(usuario.getRol())) {
-                    // 🔒 Empleado: ocultar botones o deshabilitarlos
-                    frameInicio.btnAnalisisFinanzas.setEnabled(false);
-                    frameInicio.btnMetas.setEnabled(false);
-                    frameInicio.btnExportarDatos.setEnabled(false);
-                }
-                frameInicio.setVisible(true);
-                this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "❌ DNI o contraseña incorrectos");
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error en base de datos: " + ex.getMessage());
-            ex.printStackTrace();
-        }
+    // 🔎 Validar campos vacíos
+    if (dni.isEmpty() || password.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "⚠️ Ingrese DNI y contraseña");
+        return;
     }
+
+    UsuarioDAOPostgres dao = new UsuarioDAOPostgres();
+    try {
+        Usuario usuario = dao.login(dni, password);
+
+        if (usuario != null) {
+            // 👉 Guardamos el usuario logueado en sesión global
+            Autenticacion.setUsuario(usuario);
+
+            JOptionPane.showMessageDialog(this,
+                "Bienvenido " + usuario.getNombre() + " (" + usuario.getRol() + ")");
+
+            // 👉 Creamos el JFrame principal
+            JframeInicio frameInicio = new JframeInicio(usuario);
+
+            // 👉 Ajustar interfaz según rol
+            if (Autenticacion.esEmpleado()) {
+                frameInicio.btnAnalisisFinanzas.setVisible(false);
+                frameInicio.btnMetas.setVisible(false);
+                frameInicio.btnExportarDatos.setVisible(false);
+            }
+
+            frameInicio.setVisible(true);
+            this.dispose();
+
+        } else {
+            JOptionPane.showMessageDialog(this, "❌ DNI o contraseña incorrectos");
+        }
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Error en base de datos: " + ex.getMessage());
+        ex.printStackTrace();
+    }
+}
+
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
