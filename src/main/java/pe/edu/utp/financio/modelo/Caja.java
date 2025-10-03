@@ -11,24 +11,48 @@ import java.time.LocalDate;
  * @author FACE
  */
 public class Caja {
-    private int id;
+    private int idCaja;
+    private int idUsuario;
+    private String nombre;
     private double fondo;
     private double cierre;
-    private LocalDate fecha;
+    private LocalDate fechaApertura;
+    private LocalDate fechaCierre;
 
-    public Caja(int id, double fondo, double cierre, LocalDate fecha) {
-        this.id = id;
+    public Caja(int idCaja, int idUsuario, String nombre, double fondo, double cierre,
+                LocalDate fechaApertura, LocalDate fechaCierre) {
+        this.idCaja = idCaja;
+        this.idUsuario = idUsuario;
+        this.nombre = nombre;
         this.fondo = fondo;
         this.cierre = cierre;
-        this.fecha = fecha;
+        this.fechaApertura = fechaApertura;
+        this.fechaCierre = fechaCierre;
     }
 
-    public int getId() {
-        return id;
+    // Getters y setters
+    public int getIdCaja() {
+        return idCaja;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdCaja(int idCaja) {
+        this.idCaja = idCaja;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public double getFondo() {
@@ -47,32 +71,19 @@ public class Caja {
         this.cierre = cierre;
     }
 
-    public LocalDate getFecha() {
-        return fecha;
+    public LocalDate getFechaApertura() {
+        return fechaApertura;
     }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
+    public void setFechaApertura(LocalDate fechaApertura) {
+        this.fechaApertura = fechaApertura;
     }
 
-    // Calcular resultado (cierre - fondo)
-    public double getResultado() {
-        return cierre - fondo;
+    public LocalDate getFechaCierre() {
+        return fechaCierre;
     }
 
-    // Saber si es ganancia o pérdida
-    public String getEstado() {
-        double resultado = getResultado();
-        return (resultado >= 0)
-                ? "Ganancia de " + resultado + " soles"
-                : "Pérdida de " + Math.abs(resultado) + " soles";
-    }
-
-    @Override
-    public String toString() {
-        return "📌 Resumen del día (" + fecha + "):\n" +
-               "Fondo de inicio (mañana): " + fondo + " soles\n" +
-               "Cierre de caja (noche): " + cierre + " soles\n" +
-               "Resultado: " + getEstado();
+    public void setFechaCierre(LocalDate fechaCierre) {
+        this.fechaCierre = fechaCierre;
     }
 }

@@ -30,15 +30,16 @@ CREATE TABLE metodopago (
 );
 
 
-CREATE TABLE caja_chica (
+CREATE TABLE caja (
     id_caja SERIAL PRIMARY KEY,
     id_usuario INT REFERENCES usuarios(id_usuario) ON DELETE CASCADE, -- responsable
     nombre VARCHAR(100) NOT NULL,
-    monto_inicial NUMERIC(12,2) NOT NULL,
-    monto_actual NUMERIC(12,2) NOT NULL,
+    fondo NUMERIC(12,2) NOT NULL,
+    cierre NUMERIC(12,2) NOT NULL,
     fecha_apertura DATE DEFAULT CURRENT_DATE,
-    estado VARCHAR(20) CHECK (estado IN ('ABIERTA','CERRADA')) DEFAULT 'ABIERTA'
+    fecha_cierre DATE
 );
+
 
 
 CREATE TABLE movimientos (
