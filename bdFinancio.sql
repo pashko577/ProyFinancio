@@ -11,6 +11,7 @@ CREATE TABLE usuarios (
     id_admin INT REFERENCES usuarios(id_usuario) -- opcional: admin responsable
 );
 
+select*from usuarios;
 
 CREATE TABLE categorias (
     id_categoria SERIAL PRIMARY KEY,
@@ -40,6 +41,8 @@ CREATE TABLE caja (
     fecha_cierre DATE
 );
 
+select*from caja;
+
 
 
 CREATE TABLE movimientos (
@@ -51,9 +54,9 @@ CREATE TABLE movimientos (
     descripcion TEXT,
     fecha TIMESTAMP DEFAULT NOW(),
     creado_por INT REFERENCES usuarios(id_usuario),
-    id_caja INT REFERENCES caja_chica(id_caja)
+    
 );
-
+select*from movimientos;
 
 CREATE TABLE metas (
     id_meta SERIAL PRIMARY KEY,
@@ -107,15 +110,4 @@ CREATE TABLE deudas (
     fecha_inicio DATE NOT NULL,
     fecha_vencimiento DATE,
     estado VARCHAR(20) CHECK (estado IN ('PENDIENTE','PAGADA','INCUMPLIDA')) DEFAULT 'PENDIENTE'
-);
-
-
-CREATE TABLE caja_chica_movimientos (
-    id_movimiento SERIAL PRIMARY KEY,
-    id_caja INT REFERENCES caja_chica(id_caja) ON DELETE CASCADE,
-    id_usuario INT REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
-    descripcion TEXT NOT NULL,
-    monto NUMERIC(12,2) NOT NULL,
-    tipo VARCHAR(10) CHECK (tipo IN ('EGRESO','REPOSICION')) NOT NULL,
-    fecha TIMESTAMP DEFAULT NOW()
 );

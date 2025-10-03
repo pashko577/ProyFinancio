@@ -13,7 +13,7 @@ import com.mongodb.client.MongoDatabase;
  * @author User
  */
 public class ConexionMongo {
-        private static final String URI = "mongodb+srv://victor:root@cluster0.hhvs9gs.mongodb.net/";
+        private static final String URI = "mongodb+srv://tonnyghp577:root@cluster0.mogadiy.mongodb.net/";
 
     public static MongoDatabase getDatabase(String dbName) {
         MongoClient client = MongoClients.create(URI);

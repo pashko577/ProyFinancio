@@ -75,7 +75,7 @@ public class JframeLogin extends javax.swing.JFrame {
         });
 
         btnIngresar.setBackground(new java.awt.Color(153, 255, 204));
-        btnIngresar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pe/edu/utp/financio/images/ingreso.png"))); // NOI18N
+       
         btnIngresar.setText("Iniciar Sesión");
         btnIngresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

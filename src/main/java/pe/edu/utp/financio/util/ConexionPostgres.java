@@ -16,7 +16,7 @@ public class ConexionPostgres {
 
     private static final String URL = "jdbc:postgresql://localhost:5432/financio";
     private static final String USER = "postgres";
-    private static final String PASS = "10701204";
+    private static final String PASS = "root";
 
     public static Connection getConnection() {
         try {
