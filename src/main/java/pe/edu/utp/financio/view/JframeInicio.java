@@ -4,6 +4,7 @@
  */
 package pe.edu.utp.financio.view;
 
+import com.itextpdf.text.BaseColor;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.io.FileOutputStream;
@@ -38,13 +39,25 @@ import pe.edu.utp.financio.service.MovimientoService;
 import pe.edu.utp.financio.service.impl.MovimientoServiceImpl;
 
 //word
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.FileOutputStream;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Stream;
+
 
 //excel
 import org.apache.poi.ss.usermodel.Workbook;
@@ -58,10 +71,37 @@ import java.math.BigDecimal;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import javax.swing.JPanel;
 import pe.edu.utp.financio.dao.impl.CajaDAOImpl;
 import pe.edu.utp.financio.dao1.CajaDAO;
 import pe.edu.utp.financio.modelo.Caja;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
+import java.io.FileOutputStream;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+
+//dasboard
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.util.stream.Stream;
+import javax.swing.SwingUtilities;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.chart.plot.PlotOrientation;
 
 
 /**
@@ -86,8 +126,12 @@ public class JframeInicio extends javax.swing.JFrame {
     public JframeInicio() {
         initComponents(); // inicializa tus campos, botones, tabla, etc.
         mostrarCajas(); // puedes llamar aquí para cargar al inicio
+        
+        
         jDateChooserResumen.addPropertyChangeListener("date", evt -> {
     txtresumen.setText(""); // limpia el resumen cada vez que cambias la fecha
+   
+    
 });
 
     }
@@ -260,6 +304,7 @@ public class JframeInicio extends javax.swing.JFrame {
         jLabel29 = new javax.swing.JLabel();
         cbxMetodoPagoGasto = new javax.swing.JComboBox<>();
         PanelAnalisisFinanzas = new javax.swing.JPanel();
+        jpComparacionIngresos_Gastos = new javax.swing.JPanel();
         PanelMovimientos = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -753,15 +798,32 @@ public class JframeInicio extends javax.swing.JFrame {
 
         PanelAnalisisFinanzas.setBackground(new java.awt.Color(204, 204, 255));
 
+        javax.swing.GroupLayout jpComparacionIngresos_GastosLayout = new javax.swing.GroupLayout(jpComparacionIngresos_Gastos);
+        jpComparacionIngresos_Gastos.setLayout(jpComparacionIngresos_GastosLayout);
+        jpComparacionIngresos_GastosLayout.setHorizontalGroup(
+            jpComparacionIngresos_GastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 636, Short.MAX_VALUE)
+        );
+        jpComparacionIngresos_GastosLayout.setVerticalGroup(
+            jpComparacionIngresos_GastosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 352, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout PanelAnalisisFinanzasLayout = new javax.swing.GroupLayout(PanelAnalisisFinanzas);
         PanelAnalisisFinanzas.setLayout(PanelAnalisisFinanzasLayout);
         PanelAnalisisFinanzasLayout.setHorizontalGroup(
             PanelAnalisisFinanzasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1172, Short.MAX_VALUE)
+            .addGroup(PanelAnalisisFinanzasLayout.createSequentialGroup()
+                .addGap(71, 71, 71)
+                .addComponent(jpComparacionIngresos_Gastos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(491, Short.MAX_VALUE))
         );
         PanelAnalisisFinanzasLayout.setVerticalGroup(
             PanelAnalisisFinanzasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 809, Short.MAX_VALUE)
+            .addGroup(PanelAnalisisFinanzasLayout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addComponent(jpComparacionIngresos_Gastos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(601, Short.MAX_VALUE))
         );
 
         JPpanelcontenido.add(PanelAnalisisFinanzas, "card5");
@@ -2535,20 +2597,43 @@ btnagregarfondo.addActionListener(e -> {
         }
     }
    
-    private void exportarIngresosAPdf(List<Movimiento> lista) throws Exception {
-    Document doc = new Document();
+    // 📌 Método para exportar INGRESOS
+      private void exportarIngresosAPdf(List<Movimiento> lista) throws Exception {
+    Document doc = new Document(PageSize.A4, 36, 36, 54, 36); // A4 con márgenes
     PdfWriter.getInstance(doc, new FileOutputStream("Ingresos.pdf"));
     doc.open();
 
-    doc.add(new Paragraph("Reporte de Ingresos"));
+    // 👌 Encabezado
+    Paragraph titulo = new Paragraph("📊 Sistema de Finanzas Personales", 
+            FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16, BaseColor.BLACK));
+    titulo.setAlignment(Element.ALIGN_CENTER);
+    doc.add(titulo);
+
+    Paragraph subtitulo = new Paragraph("Reporte de Ingresos", 
+            FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, BaseColor.BLUE));
+    subtitulo.setAlignment(Element.ALIGN_CENTER);
+    doc.add(subtitulo);
+
+    doc.add(new Paragraph("Usuario: " + usuario.getNombre()));
+    doc.add(new Paragraph("Fecha de emisión: " + 
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+    doc.add(new Paragraph("-------------------------------------------------------------------"));
     doc.add(new Paragraph(" ")); // salto de línea
 
-    PdfPTable table = new PdfPTable(5); // 5 columnas
-    table.addCell("ID");
-    table.addCell("Categoria");
-    table.addCell("Método Pago");
-    table.addCell("Descripción");
-    table.addCell("Monto");
+    // 👌 Tabla
+    PdfPTable table = new PdfPTable(5);
+    table.setWidthPercentage(100);
+    table.setWidths(new float[]{2, 3, 3, 4, 2});
+
+    // Cabecera en negrita
+    Stream.of("ID", "Categoría", "Método Pago", "Descripción", "Monto")
+            .forEach(col -> {
+                PdfPCell header = new PdfPCell(new Phrase(col, 
+                        FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.WHITE)));
+                header.setBackgroundColor(BaseColor.DARK_GRAY);
+                header.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(header);
+            });
 
     BigDecimal total = BigDecimal.ZERO;
 
@@ -2563,26 +2648,53 @@ btnagregarfondo.addActionListener(e -> {
     }
 
     doc.add(table);
-    doc.add(new Paragraph("Total: " + total.toString()));
-    doc.close();
 
-    JOptionPane.showMessageDialog(this, "PDF generado correctamente ✅");
+    // 👌 Total en negrita al final
+    Paragraph totalTxt = new Paragraph("Total Ingresos: " + total.toString(),
+            FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.BLACK));
+    totalTxt.setAlignment(Element.ALIGN_RIGHT);
+    doc.add(totalTxt);
+
+    doc.close();
+    JOptionPane.showMessageDialog(this, "PDF de Ingresos generado ✅");
 }
 
-    private void exportarGastosAPdf(List<Movimiento> lista) throws Exception {
-    Document doc = new Document();
+
+   private void exportarGastosAPdf(List<Movimiento> lista) throws Exception {
+    Document doc = new Document(PageSize.A4, 36, 36, 54, 36); 
     PdfWriter.getInstance(doc, new FileOutputStream("Gastos.pdf"));
     doc.open();
 
-    doc.add(new Paragraph("Reporte de Gastos"));
+    // Encabezado
+    Paragraph titulo = new Paragraph("📊 Financio", 
+            FontFactory.getFont(FontFactory.HELVETICA_BOLD, 16, BaseColor.BLACK));
+    titulo.setAlignment(Element.ALIGN_CENTER);
+    doc.add(titulo);
+
+    Paragraph subtitulo = new Paragraph("Reporte de Gastos", 
+            FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, BaseColor.RED));
+    subtitulo.setAlignment(Element.ALIGN_CENTER);
+    doc.add(subtitulo);
+
+    doc.add(new Paragraph("Usuario: " + usuario.getNombre()));
+    doc.add(new Paragraph("Fecha de emisión: " + 
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+    doc.add(new Paragraph("-------------------------------------------------------------------"));
     doc.add(new Paragraph(" "));
 
+    // Tabla
     PdfPTable table = new PdfPTable(5);
-    table.addCell("ID");
-    table.addCell("Categoria");
-    table.addCell("Método Pago");
-    table.addCell("Descripción");
-    table.addCell("Monto");
+    table.setWidthPercentage(100);
+    table.setWidths(new float[]{2, 3, 3, 4, 2});
+
+    Stream.of("ID", "Categoría", "Método Pago", "Descripción", "Monto")
+            .forEach(col -> {
+                PdfPCell header = new PdfPCell(new Phrase(col, 
+                        FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.WHITE)));
+                header.setBackgroundColor(BaseColor.DARK_GRAY);
+                header.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(header);
+            });
 
     BigDecimal total = BigDecimal.ZERO;
 
@@ -2597,9 +2709,13 @@ btnagregarfondo.addActionListener(e -> {
     }
 
     doc.add(table);
-    doc.add(new Paragraph("Total Gastos: " + total.toString()));
-    doc.close();
 
+    Paragraph totalTxt = new Paragraph("Total Gastos: " + total.toString(),
+            FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.BLACK));
+    totalTxt.setAlignment(Element.ALIGN_RIGHT);
+    doc.add(totalTxt);
+
+    doc.close();
     JOptionPane.showMessageDialog(this, "PDF de Gastos generado ✅");
 }
 
@@ -2646,20 +2762,69 @@ btnagregarfondo.addActionListener(e -> {
 }
 
     //exportar Excel
-    private void exportarIngresosAExcel(List<Movimiento> lista) throws Exception {
+   private void exportarIngresosAExcel(List<Movimiento> lista) throws Exception {
     Workbook workbook = new XSSFWorkbook();
     Sheet sheet = workbook.createSheet("Ingresos");
 
-    // Encabezados
-    String[] columnas = {"ID", "Categoria", "Método Pago", "Descripción", "Monto"};
-    Row headerRow = sheet.createRow(0);
+    // 🔹 Estilos
+    CellStyle tituloStyle = workbook.createCellStyle();
+    Font tituloFont = workbook.createFont();
+    tituloFont.setBold(true);
+    tituloFont.setFontHeightInPoints((short)16);
+    tituloStyle.setFont(tituloFont);
+
+    CellStyle subtituloStyle = workbook.createCellStyle();
+    Font subtituloFont = workbook.createFont();
+    subtituloFont.setBold(true);
+    subtituloFont.setFontHeightInPoints((short)14);
+    subtituloFont.setColor(IndexedColors.BLUE.getIndex());
+    subtituloStyle.setFont(subtituloFont);
+
+    CellStyle headerStyle = workbook.createCellStyle();
+    Font headerFont = workbook.createFont();
+    headerFont.setBold(true);
+    headerFont.setColor(IndexedColors.WHITE.getIndex());
+    headerStyle.setFont(headerFont);
+    headerStyle.setFillForegroundColor(IndexedColors.DARK_BLUE.getIndex());
+    headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+    headerStyle.setAlignment(HorizontalAlignment.CENTER);
+
+    CellStyle totalStyle = workbook.createCellStyle();
+    Font totalFont = workbook.createFont();
+    totalFont.setBold(true);
+    totalStyle.setFont(totalFont);
+    totalStyle.setAlignment(HorizontalAlignment.RIGHT);
+
+    // 🔹 Encabezado formal
+    int rowNum = 0;
+    Row tituloRow = sheet.createRow(rowNum++);
+    tituloRow.createCell(0).setCellValue("📊 Financio");
+    tituloRow.getCell(0).setCellStyle(tituloStyle);
+
+    Row subtituloRow = sheet.createRow(rowNum++);
+    subtituloRow.createCell(0).setCellValue("Reporte de Ingresos");
+    subtituloRow.getCell(0).setCellStyle(subtituloStyle);
+
+    Row usuarioRow = sheet.createRow(rowNum++);
+    usuarioRow.createCell(0).setCellValue("Usuario: " + usuario.getNombre());
+
+    Row fechaRow = sheet.createRow(rowNum++);
+    fechaRow.createCell(0).setCellValue("Fecha de emisión: " +
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+
+    rowNum++; // Línea en blanco
+
+    // 🔹 Cabecera de tabla
+    String[] columnas = {"ID", "Categoría", "Método Pago", "Descripción", "Monto"};
+    Row headerRow = sheet.createRow(rowNum++);
     for (int i = 0; i < columnas.length; i++) {
-        headerRow.createCell(i).setCellValue(columnas[i]);
+        Cell cell = headerRow.createCell(i);
+        cell.setCellValue(columnas[i]);
+        cell.setCellStyle(headerStyle);
     }
 
-    int rowNum = 1;
+    // 🔹 Datos
     BigDecimal total = BigDecimal.ZERO;
-
     for (Movimiento m : lista) {
         Row row = sheet.createRow(rowNum++);
         row.createCell(0).setCellValue(m.getId());
@@ -2671,12 +2836,14 @@ btnagregarfondo.addActionListener(e -> {
         total = total.add(m.getMonto());
     }
 
-    // Total
+    // 🔹 Total
     Row totalRow = sheet.createRow(rowNum);
     totalRow.createCell(3).setCellValue("TOTAL:");
-    totalRow.createCell(4).setCellValue(total.doubleValue());
+    Cell totalCell = totalRow.createCell(4);
+    totalCell.setCellValue(total.doubleValue());
+    totalCell.setCellStyle(totalStyle);
 
-    // Ajustar ancho columnas
+    // 🔹 Ajustar ancho de columnas
     for (int i = 0; i < columnas.length; i++) {
         sheet.autoSizeColumn(i);
     }
@@ -2689,19 +2856,81 @@ btnagregarfondo.addActionListener(e -> {
     JOptionPane.showMessageDialog(this, "Excel de Ingresos generado ✅");
 }
 
-    private void exportarGastosAExcel(List<Movimiento> lista) throws Exception {
+
+   private void exportarGastosAExcel(List<Movimiento> lista) throws Exception {
     Workbook workbook = new XSSFWorkbook();
     Sheet sheet = workbook.createSheet("Gastos");
 
-    String[] columnas = {"ID", "Categoria", "Método Pago", "Descripción", "Monto"};
-    Row headerRow = sheet.createRow(0);
+    int rowNum = 0;
+
+    // 👌 Estilos
+    Font tituloFont = workbook.createFont();
+    tituloFont.setBold(true);
+    tituloFont.setFontHeightInPoints((short)16);
+
+    Font subtituloFont = workbook.createFont();
+    subtituloFont.setBold(true);
+    subtituloFont.setColor(IndexedColors.BLUE.getIndex());
+    subtituloFont.setFontHeightInPoints((short)14);
+
+    Font headerFont = workbook.createFont();
+    headerFont.setBold(true);
+    headerFont.setColor(IndexedColors.WHITE.getIndex());
+
+    CellStyle tituloStyle = workbook.createCellStyle();
+    tituloStyle.setFont(tituloFont);
+    tituloStyle.setAlignment(HorizontalAlignment.CENTER);
+
+    CellStyle subtituloStyle = workbook.createCellStyle();
+    subtituloStyle.setFont(subtituloFont);
+    subtituloStyle.setAlignment(HorizontalAlignment.CENTER);
+
+    CellStyle headerStyle = workbook.createCellStyle();
+    headerStyle.setFont(headerFont);
+    headerStyle.setFillForegroundColor(IndexedColors.DARK_BLUE.getIndex());
+    headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+    headerStyle.setAlignment(HorizontalAlignment.CENTER);
+
+    CellStyle totalStyle = workbook.createCellStyle();
+    Font boldFont = workbook.createFont();
+    boldFont.setBold(true);
+    totalStyle.setFont(boldFont);
+
+    // 👌 Encabezado del reporte
+    Row tituloRow = sheet.createRow(rowNum++);
+    Cell tituloCell = tituloRow.createCell(0);
+    tituloCell.setCellValue("📊 Financio");
+    tituloCell.setCellStyle(tituloStyle);
+
+    sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(0,0,0,4));
+
+    Row subtituloRow = sheet.createRow(rowNum++);
+    Cell subtituloCell = subtituloRow.createCell(0);
+    subtituloCell.setCellValue("Reporte de Gastos");
+    subtituloCell.setCellStyle(subtituloStyle);
+
+    sheet.addMergedRegion(new org.apache.poi.ss.util.CellRangeAddress(1,1,0,4));
+
+    Row userRow = sheet.createRow(rowNum++);
+    userRow.createCell(0).setCellValue("Usuario: " + usuario.getNombre());
+
+    Row fechaRow = sheet.createRow(rowNum++);
+    fechaRow.createCell(0).setCellValue("Fecha de emisión: " + 
+        LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+
+    rowNum++; // Espacio
+
+    // 👌 Cabeceras
+    String[] columnas = {"ID", "Categoría", "Método Pago", "Descripción", "Monto"};
+    Row headerRow = sheet.createRow(rowNum++);
     for (int i = 0; i < columnas.length; i++) {
-        headerRow.createCell(i).setCellValue(columnas[i]);
+        Cell cell = headerRow.createCell(i);
+        cell.setCellValue(columnas[i]);
+        cell.setCellStyle(headerStyle);
     }
 
-    int rowNum = 1;
+    // 👌 Datos
     BigDecimal total = BigDecimal.ZERO;
-
     for (Movimiento m : lista) {
         Row row = sheet.createRow(rowNum++);
         row.createCell(0).setCellValue(m.getId());
@@ -2713,10 +2942,14 @@ btnagregarfondo.addActionListener(e -> {
         total = total.add(m.getMonto());
     }
 
+    // 👌 Total
     Row totalRow = sheet.createRow(rowNum);
     totalRow.createCell(3).setCellValue("TOTAL:");
-    totalRow.createCell(4).setCellValue(total.doubleValue());
+    Cell totalCell = totalRow.createCell(4);
+    totalCell.setCellValue(total.doubleValue());
+    totalCell.setCellStyle(totalStyle);
 
+    // Ajustar columnas
     for (int i = 0; i < columnas.length; i++) {
         sheet.autoSizeColumn(i);
     }
@@ -2763,6 +2996,59 @@ btnagregarfondo.addActionListener(e -> {
 
     JOptionPane.showMessageDialog(this, "Excel de Movimientos generado ✅");
 }
+
+    
+    //graficos
+    
+//    private void generarGraficoDesdeTablas() {
+//    BigDecimal totalIngresos = BigDecimal.ZERO;
+//    BigDecimal totalGastos = BigDecimal.ZERO;
+//
+//    // 🔹 Sumar todos los montos de la tabla de Ingresos
+//    DefaultTableModel modeloIngresos = (DefaultTableModel) tblIngreso.getModel();
+//    for (int i = 0; i < modeloIngresos.getRowCount(); i++) {
+//        BigDecimal monto = new BigDecimal(modeloIngresos.getValueAt(i, 4).toString());
+//        totalIngresos = totalIngresos.add(monto);
+//    }
+//
+//    // 🔹 Sumar todos los montos de la tabla de Gastos
+//    DefaultTableModel modeloGastos = (DefaultTableModel) tblGastos.getModel();
+//    for (int i = 0; i < modeloGastos.getRowCount(); i++) {
+//        BigDecimal monto = new BigDecimal(modeloGastos.getValueAt(i, 4).toString());
+//        totalGastos = totalGastos.add(monto);
+//    }
+//
+//    // 🔹 Mostrar en el gráfico
+//    mostrarGraficoIngresosVsGastos(totalIngresos, totalGastos);
+//}
+//
+//   private void mostrarGraficoIngresosVsGastos(BigDecimal totalIngresos, BigDecimal totalGastos) {
+//    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+//    dataset.addValue(totalIngresos, "Monto", "Ingresos");
+//    dataset.addValue(totalGastos, "Monto", "Gastos");
+//
+//    JFreeChart chart = ChartFactory.createBarChart(
+//            "Ingresos vs Gastos",
+//            "Categoría",
+//            "Monto",
+//            dataset,
+//            PlotOrientation.VERTICAL,
+//            false, true, false);
+//
+//    ChartPanel chartPanel = new ChartPanel(chart);
+//
+//    // 🔹 IMPORTANTE: asegurar layout y tamaño
+//    jpComparacionIngresos_Gastos.setLayout(new BorderLayout());
+//    jpComparacionIngresos_Gastos.removeAll();
+//    jpComparacionIngresos_Gastos.add(chartPanel, BorderLayout.CENTER);
+//
+//    jpComparacionIngresos_Gastos.revalidate();
+//    jpComparacionIngresos_Gastos.repaint();
+//}
+//
+//
+//
+
 
     
 
@@ -2909,6 +3195,7 @@ btnagregarfondo.addActionListener(e -> {
     private com.toedter.calendar.JDateChooser jdcFechaMeta;
     private com.toedter.calendar.JDateChooser jdcFinal;
     private com.toedter.calendar.JDateChooser jdcInicio;
+    private javax.swing.JPanel jpComparacionIngresos_Gastos;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JTable tblGastos;
     private javax.swing.JTable tblIngreso;
