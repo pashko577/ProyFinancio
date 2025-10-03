@@ -58,6 +58,7 @@ import java.math.BigDecimal;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import pe.edu.utp.financio.dao.impl.CajaDAOImpl;
 import pe.edu.utp.financio.dao1.CajaDAO;
 import pe.edu.utp.financio.modelo.Caja;
 
@@ -77,7 +78,7 @@ public class JframeInicio extends javax.swing.JFrame {
     private MovimientoService movimientoService = new MovimientoServiceImpl();
     MovimientoDaoImpl daoMov = new MovimientoDaoImpl();
     private Map<String, JProgressBar> barrasMetas = new HashMap<>();
-
+private CajaDAO cajaDao = new CajaDAOImpl();
     public JframeInicio(Usuario usuario) {
         initComponents();
         inicializarTablaMetas();
@@ -279,7 +280,7 @@ public class JframeInicio extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         txtresumen = new javax.swing.JTextArea();
         btneliminar = new javax.swing.JButton();
-        btnagregar1 = new javax.swing.JButton();
+        btnagregar = new javax.swing.JButton();
         btnmostrar = new javax.swing.JButton();
         jDateChooser = new com.toedter.calendar.JDateChooser();
         jDateChooser3 = new com.toedter.calendar.JDateChooser();
@@ -1253,12 +1254,12 @@ public class JframeInicio extends javax.swing.JFrame {
             }
         });
 
-        btnagregar1.setBackground(new java.awt.Color(204, 204, 204));
-        btnagregar1.setFont(new java.awt.Font("Sitka Text", 1, 24)); // NOI18N
-        btnagregar1.setText("AGREGAR");
-        btnagregar1.addActionListener(new java.awt.event.ActionListener() {
+        btnagregar.setBackground(new java.awt.Color(204, 204, 204));
+        btnagregar.setFont(new java.awt.Font("Sitka Text", 1, 24)); // NOI18N
+        btnagregar.setText("AGREGAR");
+        btnagregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnagregar1ActionPerformed(evt);
+                btnagregarActionPerformed(evt);
             }
         });
 
@@ -1315,7 +1316,7 @@ public class JframeInicio extends javax.swing.JFrame {
                             .addComponent(jLabel33)
                             .addComponent(txtcierre, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnagregar1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnagregar, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(109, 109, 109)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtid, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1346,7 +1347,7 @@ public class JframeInicio extends javax.swing.JFrame {
                                     .addComponent(jDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(16, 16, 16)
                                 .addComponent(jLabel33))
-                            .addComponent(btnagregar1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnagregar, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtcierre, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -1881,22 +1882,45 @@ public class JframeInicio extends javax.swing.JFrame {
         btncomenzar.addActionListener(e -> cardLayout.show(JPpanelcontenido, "panelIngresos"));
     }//GEN-LAST:event_btncomenzarActionPerformed
 
-    private void btnagregar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregar1ActionPerformed
-        // Obtener datos desde la interfaz
-double fondo = Double.parseDouble(txtfondo.getText());
-Date fechaSeleccionada = jDateChooser.getDate();
+    private void btnagregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnagregarActionPerformed
 
-LocalDate fecha = fechaSeleccionada.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        btnagregar.addActionListener(e -> {
+    try {
+        // Validar y obtener datos
+        double fondo = Double.parseDouble(txtfondo.getText());
+        double cierre = Double.parseDouble(txtcierre.getText());
 
-Caja caja = new Caja(0, fondo, 0, fecha); // id = 0 porque se genera en BD
-int id = CajaDAO.guardar(caja);
+        Date fechaSeleccionada = jDateChooser.getDate();
+        if (fechaSeleccionada == null) {
+            JOptionPane.showMessageDialog(null, "Selecciona una fecha");
+            return;
+        }
 
-if (id > 0) {
-    JOptionPane.showMessageDialog(null, "Caja registrada con ID: " + id);
-} else {
-    JOptionPane.showMessageDialog(null, "Error al registrar");
-}
-    }//GEN-LAST:event_btnagregar1ActionPerformed
+        LocalDate fecha = fechaSeleccionada.toInstant()
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate();
+
+        // Crear objeto Caja
+        Caja caja = new Caja(0, fondo, cierre, fecha);
+
+        // Guardar usando el DAO
+        int id = cajaDao.guardar(caja);
+
+        if (id > 0) {
+            JOptionPane.showMessageDialog(null, "Caja registrada con ID: " + id);
+       
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo registrar");
+        }
+
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(null, "Fondo y cierre deben ser números válidos");
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(null, "Error en la base de datos: " + ex.getMessage());
+    }
+});
+
+    }//GEN-LAST:event_btnagregarActionPerformed
 
     private void btneliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneliminarActionPerformed
 
@@ -1909,7 +1933,7 @@ if (id > 0) {
         }
 
         int id = Integer.parseInt(textoId);
-        boolean eliminado = CajaDAO.eliminar(id);
+        boolean eliminado = cajaDao.eliminar(id);
 
         if (eliminado) {
             JOptionPane.showMessageDialog(null, "Registro eliminado con ID: " + id);
@@ -2634,7 +2658,7 @@ if (id > 0) {
     private javax.swing.JButton btnMeta;
     public javax.swing.JButton btnMetas;
     public javax.swing.JButton btnMovimiento;
-    private javax.swing.JButton btnagregar1;
+    private javax.swing.JButton btnagregar;
     private javax.swing.JButton btncerrarsesion;
     private javax.swing.JButton btncomenzar;
     private javax.swing.JButton btneliminar;

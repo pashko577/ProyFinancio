@@ -1717,7 +1717,7 @@
                                       <Component id="txtcierre" alignment="0" min="-2" pref="192" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="btnagregar1" min="-2" pref="152" max="-2" attributes="0"/>
+                                  <Component id="btnagregar" min="-2" pref="152" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="109" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="txtid" min="-2" pref="192" max="-2" attributes="0"/>
@@ -1757,7 +1757,7 @@
                                           <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                                           <Component id="jLabel33" min="-2" max="-2" attributes="0"/>
                                       </Group>
-                                      <Component id="btnagregar1" min="-2" pref="75" max="-2" attributes="0"/>
+                                      <Component id="btnagregar" min="-2" pref="75" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="txtcierre" min="-2" pref="37" max="-2" attributes="0"/>
@@ -1892,7 +1892,7 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btneliminarActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JButton" name="btnagregar1">
+                <Component class="javax.swing.JButton" name="btnagregar">
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="cc" green="cc" red="cc" type="rgb"/>
@@ -1903,7 +1903,7 @@
                     <Property name="text" type="java.lang.String" value="AGREGAR"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnagregar1ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnagregarActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnmostrar">
