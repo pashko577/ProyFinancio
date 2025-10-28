@@ -83,7 +83,7 @@ public class JframeLogin extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pe/edu/utp/financio/images/Login.png"))); // NOI18N
+        
 
         javax.swing.GroupLayout JPcontenidoLayout = new javax.swing.GroupLayout(JPcontenido);
         JPcontenido.setLayout(JPcontenidoLayout);
